@@ -14,12 +14,12 @@ type RegisterUserParams struct {
 }
 
 func (p *RegisterUserParams) Valid() bool {
-	p.Check(p.Name != nil, "name", "cannot be empty")
-	p.Check(p.Email != nil, "email", "cannot be empty")
-	p.Check(p.Password != nil, "password", "cannot be empty")
+	p.Check(p.Name != nil, "name", "must be provided")
+	p.Check(p.Email != nil, "email", "must be provided")
+	p.Check(p.Password != nil, "password", "must be provided")
 
 	if p.Name != nil {
-		p.Check(len(*p.Name) >= 3, "name", "should be longer then 8 characters")
+		p.Check(len(*p.Name) >= 3, "name", "should be at least 3 characters long")
 	}
 
 	if p.Email != nil {
@@ -27,7 +27,7 @@ func (p *RegisterUserParams) Valid() bool {
 	}
 
 	if p.Password != nil {
-		p.Check(len(*p.Password) >= 8, "password", "cannot be empty")
+		p.Check(len(*p.Password) >= 8, "password", "should be at least 8 characters long")
 	}
 
 	return len(p.Errors) == 0
@@ -40,4 +40,17 @@ func (p *RegisterUserParams) Model() *models.User {
 		Password:    *p.Password,
 		PhoneNumber: p.PhoneNumber,
 	}
+}
+
+type UserAuthParams struct {
+	Email    *string `json:"email"`
+	Password *string `json:"password"`
+	Validator
+}
+
+func (p *UserAuthParams) Valid() bool {
+	p.Check(p.Email != nil, "email", "must be provided")
+	p.Check(p.Password != nil, "password", "must be provided")
+
+	return len(p.Errors) == 0
 }

@@ -31,3 +31,18 @@ func handleRegisterUser(w http.ResponseWriter, r *http.Request) error {
 
 	return writeJSON(w, http.StatusCreated, newUser)
 }
+
+func handleUserAuthentication(w http.ResponseWriter, r *http.Request) error {
+	var userAuthParams service.UserAuthParams
+	err := readJSON(r, &userAuthParams)
+	if err != nil {
+		return BadRequestError(err.Error())
+	}
+
+	if !userAuthParams.Valid() {
+		return ValidationError(userAuthParams.Errors)
+	}
+
+	token := map[string]any{}
+	return writeJSON(w, http.StatusCreated, token)
+}
