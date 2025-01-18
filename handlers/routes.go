@@ -6,7 +6,7 @@ func SetupMultiplexer() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	HandleCustomHandler(mux, "/healthcheck", healthcheck)
-	HandleCustomHandler(mux, "/user", RegisterUser)
+	HandleCustomHandler(mux, "/user", handleRegisterUser)
 
 	return mux
 }

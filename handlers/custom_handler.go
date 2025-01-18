@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"errors"
 	"log/slog"
 	"net/http"
 )
@@ -9,23 +8,42 @@ import (
 type Error interface {
 	error
 	Status() int
+	AdditionalParams() map[string]any
 }
 
-type StatusError struct {
-	Code int
-	Err  error
+type ErrorResponse struct {
+	code             int
+	message          string
+	additionalParams map[string]any
 }
 
-func (e StatusError) Error() string {
-	return e.Err.Error()
+func (e ErrorResponse) Error() string {
+	return e.message
 }
 
-func (e StatusError) Status() int {
-	return e.Code
+func (e ErrorResponse) Status() int {
+	return e.code
 }
 
-func newError(status int, errMsg string) Error {
-	return &StatusError{Code: status, Err: errors.New(errMsg)}
+func (e ErrorResponse) AdditionalParams() map[string]any {
+	return e.additionalParams
+}
+
+func ErrorRes(status int, message string, additionalParams map[string]any) Error {
+	return &ErrorResponse{code: status, message: message, additionalParams: additionalParams}
+}
+
+func ValidationError(paramsErrors map[string]string) Error {
+	return &ErrorResponse{
+		code:    http.StatusBadRequest,
+		message: "failed validation",
+		additionalParams: map[string]any{
+			"param_errors": paramsErrors,
+		}}
+}
+
+func BadRequestError(message string) Error {
+	return &ErrorResponse{code: http.StatusBadRequest, message: message}
 }
 
 type customHandler func(w http.ResponseWriter, r *http.Request) error
@@ -37,7 +55,18 @@ func handleErrors(h customHandler) http.HandlerFunc {
 			switch e := err.(type) {
 			case Error:
 				slog.Error(e.Error())
-				http.Error(w, e.Error(), e.Status())
+
+				resBody := map[string]any{
+					"title":   http.StatusText(e.Status()),
+					"status":  e.Status(),
+					"message": e.Error(),
+				}
+
+				for k, v := range e.AdditionalParams() {
+					resBody[k] = v
+				}
+
+				writeJSON(w, e.Status(), resBody)
 			default:
 				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
 			}

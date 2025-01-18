@@ -12,6 +12,8 @@ func readJSON(req *http.Request, to any) error {
 }
 
 func writeJSON(w http.ResponseWriter, status int, payload any) error {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
 	enc := json.NewEncoder(w)
 	err := enc.Encode(payload)
 	return err

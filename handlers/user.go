@@ -8,15 +8,15 @@ import (
 	"github.com/felipedavid/saldop/storage"
 )
 
-func RegisterUser(w http.ResponseWriter, r *http.Request) error {
+func handleRegisterUser(w http.ResponseWriter, r *http.Request) error {
 	var createUserParams service.RegisterUserParams
 	err := readJSON(r, &createUserParams)
 	if err != nil {
-		return newError(http.StatusBadRequest, "bad request")
+		return BadRequestError(err.Error())
 	}
 
 	if !createUserParams.Valid() {
-		return newError(http.StatusBadRequest, "invalid request")
+		return ValidationError(createUserParams.Errors)
 	}
 
 	newUser := createUserParams.Model()
