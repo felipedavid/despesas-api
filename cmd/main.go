@@ -60,7 +60,7 @@ func runApp() error {
 	slog.Info("Starting http server", "addr", cfg.Addr)
 
 	s := http.Server{
-		Handler: handlers.SetupRoutes(),
+		Handler: handlers.SetupMultiplexer(),
 		Addr:    cfg.Addr,
 	}
 

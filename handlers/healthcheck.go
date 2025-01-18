@@ -5,5 +5,9 @@ import (
 )
 
 func healthcheck(w http.ResponseWriter, r *http.Request) error {
-	return newError(http.StatusInternalServerError, "something ent wrong")
+	res := map[string]any{
+		"status": "healthy",
+	}
+
+	return writeJSON(w, http.StatusOK, res)
 }

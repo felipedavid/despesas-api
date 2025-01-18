@@ -2,7 +2,7 @@ package handlers
 
 import "net/http"
 
-func SetupRoutes() http.Handler {
+func SetupMultiplexer() *http.ServeMux {
 	mux := http.NewServeMux()
 
 	HandleCustomHandler(mux, "/healthcheck", healthcheck)
