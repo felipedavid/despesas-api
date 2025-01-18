@@ -11,5 +11,5 @@ func SetupRoutes() http.Handler {
 }
 
 func HandleCustomHandler(mux *http.ServeMux, path string, h customHandler) {
-	mux.HandleFunc(path, httpHandler(h))
+	mux.HandleFunc(path, handleErrors(h))
 }
