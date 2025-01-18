@@ -2,7 +2,6 @@ package service
 
 import (
 	"github.com/felipedavid/saldop/models"
-	"github.com/felipedavid/saldop/pkg/validator"
 )
 
 type RegisterUserParams struct {
@@ -11,7 +10,7 @@ type RegisterUserParams struct {
 	Password    *string `json:"password"`
 	PhoneNumber *string `json:"phone_number"`
 
-	validator.Validator
+	Validator
 }
 
 func (p *RegisterUserParams) Valid() bool {

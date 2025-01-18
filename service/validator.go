@@ -1,4 +1,4 @@
-package validator
+package service
 
 type Validator struct {
 	Errors map[string]string
