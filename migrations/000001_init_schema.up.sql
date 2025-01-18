@@ -3,12 +3,44 @@ CREATE TABLE users (
     name TEXT NOT NULL,
     email TEXT NOT NULL,
     password TEXT NOT NULL,
-    cellphone TEXT,
-    tax_number TEXT,
+    phone_number TEXT,
     birth_date DATE,
+    job_title TEXT,
+    company_name TEXT,
+    document TEXT,
+    document_type TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE address (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users (id) NOT NULL,
+    full_address TEXT NOT NULL,
+    state TEXT NOT NULL,
+    primary_address TEXT NOT NULL,
+    country TEXT NOT NULL,
+    postal_code TEXT NOT NULL,
+    city TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE phone_number (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users (id) NOT NULL,
+    value TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
+);
+
+CREATE TABLE email (
+    id SERIAL PRIMARY KEY,
+    user_id INTEGER REFERENCES users (id) NOT NULL,
+    value TEXT NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
+    updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE plan (
@@ -121,6 +153,9 @@ CREATE TABLE transaction (
     currency_code TEXT NOT NULL,
     transaction_date TIMESTAMPTZ NOT NULL,
     category_id INTEGER REFERENCES category (id),
+    status TEXT,
+    type TEXT,
+    operation_type TEXT,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMPTZ

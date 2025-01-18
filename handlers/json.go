@@ -5,7 +5,7 @@ import (
 	"net/http"
 )
 
-func readJSON(req http.Request, to any) error {
+func readJSON(req *http.Request, to any) error {
 	dec := json.NewDecoder(req.Body)
 	err := dec.Decode(&to)
 	return err

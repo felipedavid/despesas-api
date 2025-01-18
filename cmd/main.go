@@ -46,11 +46,17 @@ func runApp() error {
 		return err
 	}
 
-	slog.Info("Connecting to the database", "user", cfg.DbUser, "dbname", cfg.DbName, "dbhost", cfg.DbHost, "port", cfg.DbPort)
+	slog.Info("Creating connection pool for the database", "user", cfg.DbUser, "dbname", cfg.DbName, "dbhost", cfg.DbHost, "port", cfg.DbPort)
 
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable", cfg.DbUser, cfg.DbPassword, cfg.DbName, cfg.DbHost, cfg.DbPort)
 	connPool, err := pgxpool.New(context.Background(), connStr)
 	if err != nil {
+		return fmt.Errorf("unable to connect to the database: %s", err)
+	}
+	defer connPool.Close()
+
+	slog.Info("Pinging database")
+	if err := connPool.Ping(context.Background()); err != nil {
 		return err
 	}
 
