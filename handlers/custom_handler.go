@@ -68,7 +68,13 @@ func handleErrors(h customHandler) http.HandlerFunc {
 
 				writeJSON(w, e.Status(), resBody)
 			default:
-				http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+				resBody := map[string]any{
+					"title":   http.StatusText(http.StatusInternalServerError),
+					"status":  http.StatusInternalServerError,
+					"message": "Something unexpected happen",
+				}
+
+				writeJSON(w, http.StatusInternalServerError, resBody)
 			}
 		}
 	}

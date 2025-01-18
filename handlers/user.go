@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 
 	"github.com/felipedavid/saldop/service"
@@ -22,6 +23,9 @@ func handleRegisterUser(w http.ResponseWriter, r *http.Request) error {
 	newUser := createUserParams.Model()
 	err = storage.InsertUser(context.Background(), newUser)
 	if err != nil {
+		if errors.Is(err, storage.ErrDuplicatedEmail) {
+			return ErrorRes(http.StatusConflict, err.Error(), nil)
+		}
 		return err
 	}
 
