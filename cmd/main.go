@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"os"
 
+	"github.com/felipedavid/saldop/handlers"
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 )
@@ -58,7 +59,12 @@ func runApp() error {
 
 	slog.Info("Starting http server", "addr", cfg.Addr)
 
-	err = http.ListenAndServe(cfg.Addr, nil)
+	s := http.Server{
+		Handler: handlers.SetupRoutes(),
+		Addr:    cfg.Addr,
+	}
+
+	err = s.ListenAndServe()
 	return err
 }
 
