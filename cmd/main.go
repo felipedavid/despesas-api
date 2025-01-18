@@ -9,9 +9,8 @@ import (
 
 	"github.com/felipedavid/saldop/handlers"
 	"github.com/felipedavid/saldop/storage"
+	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
-
-	"github.com/jackc/pgx/v5"
 )
 
 type AppConfig struct {
@@ -50,12 +49,12 @@ func runApp() error {
 	slog.Info("Connecting to the database", "user", cfg.DbUser, "dbname", cfg.DbName, "dbhost", cfg.DbHost, "port", cfg.DbPort)
 
 	connStr := fmt.Sprintf("user=%s password=%s dbname=%s host=%s port=%s sslmode=disable", cfg.DbUser, cfg.DbPassword, cfg.DbName, cfg.DbHost, cfg.DbPort)
-	conn, err := pgx.Connect(context.Background(), connStr)
+	connPool, err := pgxpool.New(context.Background(), connStr)
 	if err != nil {
 		return err
 	}
 
-	storage.Init(conn)
+	storage.Init(connPool)
 
 	slog.Info("Starting http server", "addr", cfg.Addr)
 

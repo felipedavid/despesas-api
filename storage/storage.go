@@ -1,9 +1,9 @@
 package storage
 
-import "github.com/jackc/pgx/v5"
+import "github.com/jackc/pgx/v5/pgxpool"
 
-var conn *pgx.Conn
+var conn *pgxpool.Pool
 
-func Init(c *pgx.Conn) {
+func Init(c *pgxpool.Pool) {
 	conn = c
 }
