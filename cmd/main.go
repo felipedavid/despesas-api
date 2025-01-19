@@ -9,17 +9,23 @@ import (
 
 	"github.com/felipedavid/saldop/handlers"
 	"github.com/felipedavid/saldop/storage"
+	"github.com/gorilla/sessions"
 	"github.com/jackc/pgx/v5/pgxpool"
 	"github.com/joho/godotenv"
+	"github.com/markbates/goth"
+	"github.com/markbates/goth/gothic"
+	"github.com/markbates/goth/providers/google"
 )
 
 type AppConfig struct {
-	Addr       string
-	DbUser     string
-	DbPassword string
-	DbName     string
-	DbHost     string
-	DbPort     string
+	Addr                    string
+	DbUser                  string
+	DbPassword              string
+	DbName                  string
+	DbHost                  string
+	DbPort                  string
+	GoogleOauthClientID     string
+	GoogleOauthClientSecret string
 }
 
 func newAppConfig() (*AppConfig, error) {
@@ -36,9 +42,13 @@ func newAppConfig() (*AppConfig, error) {
 	cfg.DbName = os.Getenv("DB_NAME")
 	cfg.DbHost = os.Getenv("DB_HOST")
 	cfg.DbPort = os.Getenv("DB_PORT")
+	cfg.GoogleOauthClientID = os.Getenv("GOOGLE_OAUTH_CLIENT_ID")
+	cfg.GoogleOauthClientSecret = os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET")
 
 	return cfg, err
 }
+
+// REMINDER: When going to push to production, remember to create a new google oauth thing not vinculated to my real name.
 
 func runApp() error {
 	cfg, err := newAppConfig()
@@ -61,6 +71,12 @@ func runApp() error {
 	}
 
 	storage.Init(connPool)
+
+	store := sessions.NewCookieStore([]byte("alsdfjasd8fajsdf8jasdfjkj"))
+	gothic.Store = store
+
+	gProvider := google.New(cfg.GoogleOauthClientID, cfg.GoogleOauthClientSecret, "http://localhost:8080/auth/google/callback")
+	goth.UseProviders(gProvider)
 
 	slog.Info("Starting http server", "addr", cfg.Addr)
 
