@@ -5,50 +5,20 @@ import (
 	"fmt"
 	"log/slog"
 	"net/http"
-	"os"
 
 	"github.com/felipedavid/saldop/handlers"
 	"github.com/felipedavid/saldop/storage"
 	"github.com/gorilla/sessions"
 	"github.com/jackc/pgx/v5/pgxpool"
-	"github.com/joho/godotenv"
 	"github.com/markbates/goth"
 	"github.com/markbates/goth/gothic"
 	"github.com/markbates/goth/providers/google"
+
+	_ "github.com/felipedavid/saldop/translations"
 )
 
-type AppConfig struct {
-	Addr                    string
-	DbUser                  string
-	DbPassword              string
-	DbName                  string
-	DbHost                  string
-	DbPort                  string
-	GoogleOauthClientID     string
-	GoogleOauthClientSecret string
-}
-
-func newAppConfig() (*AppConfig, error) {
-	cfg := &AppConfig{}
-
-	err := godotenv.Load()
-	if err != nil {
-		return nil, err
-	}
-
-	cfg.Addr = os.Getenv("ADDR")
-	cfg.DbUser = os.Getenv("DB_USER")
-	cfg.DbPassword = os.Getenv("DB_PASSWORD")
-	cfg.DbName = os.Getenv("DB_NAME")
-	cfg.DbHost = os.Getenv("DB_HOST")
-	cfg.DbPort = os.Getenv("DB_PORT")
-	cfg.GoogleOauthClientID = os.Getenv("GOOGLE_OAUTH_CLIENT_ID")
-	cfg.GoogleOauthClientSecret = os.Getenv("GOOGLE_OAUTH_CLIENT_SECRET")
-
-	return cfg, err
-}
-
-// REMINDER: When going to push to production, remember to create a new google oauth thing not vinculated to my real name.
+// REMINDER: When going to push to production, remember to create a new google
+// oauth thing not vinculated to my real name.
 
 func runApp() error {
 	cfg, err := newAppConfig()
