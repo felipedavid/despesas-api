@@ -117,12 +117,13 @@ CREATE TABLE credit_account_data (
 
 CREATE TABLE account (
     id SERIAL PRIMARY KEY,
-    external_id TEXT, -- pluggy account id
     type TEXT NOT NULL,
-    subtype TEXT NOT NULL,
     name TEXT NOT NULL,
     balance INT NOT NULL,
     currency_code TEXT NOT NULL,
+    user_id INTEGER REFERENCES users (id) NOT NULL,
+    external_id TEXT, -- pluggy account id
+    subtype TEXT,
     number TEXT,
     owner TEXT,
     tax_number TEXT,
@@ -147,8 +148,8 @@ CREATE TABLE transaction (
     id SERIAL PRIMARY KEY,
     external_id TEXT, -- pluggy transaction id
     user_id INTEGER REFERENCES users (id) NOT NULL,
-    account_id INTEGER REFERENCES account (id) NOT NULL,
-    description TEXT NOT NULL,
+    account_id INTEGER REFERENCES account (id),
+    description TEXT,
     amount INT NOT NULL,
     currency_code TEXT NOT NULL,
     transaction_date TIMESTAMPTZ NOT NULL,

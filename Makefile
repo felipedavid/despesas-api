@@ -10,4 +10,4 @@ database:
 
 nukedatabase:
 	docker compose down database
-	docker volume rm saldop_database_data
+	docker volume rm saldop-api_database_data
