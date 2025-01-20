@@ -1,6 +1,11 @@
 package service
 
-import "github.com/felipedavid/saldop/models"
+import (
+	"context"
+
+	"github.com/felipedavid/saldop/localizer"
+	"github.com/felipedavid/saldop/models"
+)
 
 type CreateAccountParams struct {
 	Name         *string `json:"name"`
@@ -11,7 +16,14 @@ type CreateAccountParams struct {
 	Validator
 }
 
-func (p *CreateAccountParams) Valid() bool {
+func NewCreateAccountParams(ctx context.Context) *CreateAccountParams {
+	var params CreateAccountParams
+	params.Validator.Localizer, _ = localizer.Get(ctx.Value("language").(string))
+
+	return &params
+}
+
+func (p *CreateAccountParams) Validate(ctx context.Context) bool {
 	p.Check(p.Name != nil, "name", "must be provided")
 	p.Check(p.Type != nil, "type", "must be provided")
 	p.Check(p.Balance != nil, "balance", "must be provided")

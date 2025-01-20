@@ -16,7 +16,7 @@ func handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
 		return BadRequestError(err.Error())
 	}
 
-	if !createAccountParams.Valid() {
+	if !createAccountParams.Validate(r.Context()) {
 		return ValidationError(createAccountParams.Errors)
 	}
 

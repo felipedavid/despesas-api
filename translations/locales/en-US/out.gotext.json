@@ -1,0 +1,26 @@
+{
+    "language": "en-US",
+    "messages": [
+        {
+            "id": "must be provided",
+            "message": "must be provided",
+            "translation": "must be provided",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "should be at least 3 characters long",
+            "message": "should be at least 3 characters long",
+            "translation": "should be at least 3 characters long",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "should be at least 8 characters long",
+            "message": "should be at least 8 characters long",
+            "translation": "should be at least 8 characters long",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        }
+    ]
+}

@@ -1,0 +1,20 @@
+{
+    "language": "pt-BR",
+    "messages": [
+        {
+            "id": "must be provided",
+            "message": "must be provided",
+            "translation": ""
+        },
+        {
+            "id": "should be at least 3 characters long",
+            "message": "should be at least 3 characters long",
+            "translation": ""
+        },
+        {
+            "id": "should be at least 8 characters long",
+            "message": "should be at least 8 characters long",
+            "translation": ""
+        }
+    ]
+}

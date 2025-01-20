@@ -23,15 +23,15 @@ var locales = []Localizer{
 	},
 }
 
-func Get(id string) (Localizer, bool) {
+func Get(id string) (*Localizer, bool) {
 	for _, locale := range locales {
 		if id == locale.ID {
 
-			return locale, true
+			return &locale, true
 		}
 	}
 
-	return Localizer{}, false
+	return nil, false
 }
 
 func (l Localizer) Translate(key message.Reference, args ...interface{}) string {
