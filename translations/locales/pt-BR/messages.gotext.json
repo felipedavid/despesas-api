@@ -7,14 +7,24 @@
             "translation": "precisa ser informado"
         },
         {
-            "id": "should be at least 3 characters long",
-            "message": "should be at least 3 characters long",
-            "translation": "deve ter pelomenos 3 caracteres"
+            "id": "cannot be empty",
+            "message": "cannot be empty",
+            "translation": "não pode estar vazio"
         },
         {
             "id": "should be at least 8 characters long",
             "message": "should be at least 8 characters long",
             "translation": "deve ter pelomenos 8 caracteres"
+        },
+        {
+            "id": "should be 26 bytes long",
+            "message": "should be 26 bytes long",
+            "translation": "deveria ter pelomenos 26 bytes de tamanho"
+        },
+        {
+            "id": "should be at least 3 characters long",
+            "message": "should be at least 3 characters long",
+            "translation": "deve ter pelomenos 3 caracteres"
         }
     ]
 }

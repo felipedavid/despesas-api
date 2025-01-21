@@ -6,6 +6,7 @@ import (
 
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
+	"github.com/felipedavid/saldop/validator"
 )
 
 type CreateTransactionParams struct {
@@ -16,12 +17,12 @@ type CreateTransactionParams struct {
 	TransactionDate *time.Time `json:"transaction_date"`
 	CategoryID      *int       `json:"category_id"`
 
-	*Validator
+	*validator.Validator
 }
 
 func NewCreateTransactionParams(ctx context.Context) *CreateTransactionParams {
 	return &CreateTransactionParams{
-		Validator: NewValidator(helpers.GetTranslator(ctx)),
+		Validator: validator.New(helpers.GetTranslator(ctx)),
 	}
 }
 

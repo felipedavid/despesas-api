@@ -1,3 +1,10 @@
+CREATE TABLE token (
+    hash BYTEA PRIMARY KEY,
+    user_id INTEGER REFERENCES users (id) NOT NULL,
+    expiry TIMESTAMPTZ NOT NULL
+    scope TEXT NOT NULL
+);
+
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,

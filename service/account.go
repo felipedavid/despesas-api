@@ -5,6 +5,7 @@ import (
 
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
+	"github.com/felipedavid/saldop/validator"
 )
 
 type CreateAccountParams struct {
@@ -13,12 +14,12 @@ type CreateAccountParams struct {
 	Balance      *int    `json:"balance"`
 	CurrencyCode *string `json:"currency_code"`
 
-	*Validator
+	*validator.Validator
 }
 
 func NewCreateAccountParams(ctx context.Context) *CreateAccountParams {
 	return &CreateAccountParams{
-		Validator: NewValidator(helpers.GetTranslator(ctx)),
+		Validator: validator.New(helpers.GetTranslator(ctx)),
 	}
 }
 

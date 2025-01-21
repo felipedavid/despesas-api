@@ -144,3 +144,7 @@ func FindUserByEmail(ctx context.Context, email string) (*models.User, error) {
 
 	return &user, nil
 }
+
+func GetUserByToken(tokenScope models.TokenScope, tokenPlainText string) (*models.User, error) {
+	return nil, nil
+}

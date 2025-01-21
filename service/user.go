@@ -5,6 +5,7 @@ import (
 
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
+	"github.com/felipedavid/saldop/validator"
 )
 
 type RegisterUserParams struct {
@@ -13,12 +14,12 @@ type RegisterUserParams struct {
 	Password    *string `json:"password"`
 	PhoneNumber *string `json:"phone_number"`
 
-	*Validator
+	*validator.Validator
 }
 
 func NewRegisterUserParams(ctx context.Context) *RegisterUserParams {
 	return &RegisterUserParams{
-		Validator: NewValidator(helpers.GetTranslator(ctx)),
+		Validator: validator.New(helpers.GetTranslator(ctx)),
 	}
 }
 
@@ -54,12 +55,12 @@ func (p *RegisterUserParams) Model() *models.User {
 type UserAuthParams struct {
 	Email    *string `json:"email"`
 	Password *string `json:"password"`
-	*Validator
+	*validator.Validator
 }
 
 func NewUserAuthParams(ctx context.Context) *UserAuthParams {
 	return &UserAuthParams{
-		Validator: NewValidator(helpers.GetTranslator(ctx)),
+		Validator: validator.New(helpers.GetTranslator(ctx)),
 	}
 }
 

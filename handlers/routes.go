@@ -13,6 +13,7 @@ func SetupMultiplexer() http.Handler {
 		"GET /healthcheck":                    healthcheck,
 		"GET /auth/{provider}/callback":       oauthCallback,
 		"GET /auth/{provider}":                oauthAuthentication,
+		"POST /auth":                          credentialsAuthentication,
 		"POST /user":                          registerUser,
 		"GET /transaction":                    listUserTransactions,
 		"POST /transaction":                   createTransaction,
@@ -26,5 +27,5 @@ func SetupMultiplexer() http.Handler {
 		mux.HandleFunc(path, handleErrors(handler))
 	}
 
-	return middleware.LogRequest(middleware.SpecifyLanguage(mux))
+	return sessionManager.LoadAndSave(middleware.LogRequest(middleware.SpecifyLanguage(mux)))
 }

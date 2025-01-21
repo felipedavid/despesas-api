@@ -1,4 +1,4 @@
-package service
+package validator
 
 import (
 	"github.com/felipedavid/saldop/translations"
@@ -9,7 +9,7 @@ type Validator struct {
 	*translations.Translator
 }
 
-func NewValidator(t *translations.Translator) *Validator {
+func New(t *translations.Translator) *Validator {
 	return &Validator{
 		Errors:     make(map[string]string),
 		Translator: t,

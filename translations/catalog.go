@@ -39,25 +39,31 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
+	"cannot be empty":                      1,
 	"must be provided":                     0,
-	"should be at least 3 characters long": 1,
+	"should be 26 bytes long":              3,
+	"should be at least 3 characters long": 4,
 	"should be at least 8 characters long": 2,
 }
 
-var en_USIndex = []uint32{ // 4 elements
-	0x00000000, 0x00000011, 0x00000036, 0x0000005b,
-} // Size: 40 bytes
+var en_USIndex = []uint32{ // 6 elements
+	0x00000000, 0x00000011, 0x00000021, 0x00000046,
+	0x0000005e, 0x00000083,
+} // Size: 48 bytes
 
-const en_USData string = "" + // Size: 91 bytes
-	"\x02must be provided\x02should be at least 3 characters long\x02should b" +
-	"e at least 8 characters long"
+const en_USData string = "" + // Size: 131 bytes
+	"\x02must be provided\x02cannot be empty\x02should be at least 8 characte" +
+	"rs long\x02should be 26 bytes long\x02should be at least 3 characters lo" +
+	"ng"
 
-var pt_BRIndex = []uint32{ // 4 elements
-	0x00000000, 0x00000016, 0x00000036, 0x00000056,
-} // Size: 40 bytes
+var pt_BRIndex = []uint32{ // 6 elements
+	0x00000000, 0x00000016, 0x0000002c, 0x0000004c,
+	0x00000076, 0x00000096,
+} // Size: 48 bytes
 
-const pt_BRData string = "" + // Size: 86 bytes
-	"\x02precisa ser informado\x02deve ter pelomenos 3 caracteres\x02deve ter" +
-	" pelomenos 8 caracteres"
+const pt_BRData string = "" + // Size: 150 bytes
+	"\x02precisa ser informado\x02não pode estar vazio\x02deve ter pelomenos " +
+	"8 caracteres\x02deveria ter pelomenos 26 bytes de tamanho\x02deve ter pe" +
+	"lomenos 3 caracteres"
 
-	// Total table size 257 bytes (0KiB); checksum: FBB5ABB6
+	// Total table size 377 bytes (0KiB); checksum: EB8914E9

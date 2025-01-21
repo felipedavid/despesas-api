@@ -5,8 +5,24 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/felipedavid/saldop/service"
 	"github.com/markbates/goth/gothic"
 )
+
+func credentialsAuthentication(w http.ResponseWriter, r *http.Request) error {
+	params := service.NewCredentialsAuthenticationParams(r.Context())
+	err := readJSON(r, params)
+	if err != nil {
+		return BadRequestError(err.Error())
+	}
+
+	// NOTE: Think about returning ValidationError() from .Valid()
+	if !params.Valid() {
+		return ValidationError(params.Errors)
+	}
+
+	return nil
+}
 
 func oauthAuthentication(w http.ResponseWriter, r *http.Request) error {
 	provider := r.PathValue("provider")

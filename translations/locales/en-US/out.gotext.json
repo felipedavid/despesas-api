@@ -9,9 +9,9 @@
             "fuzzy": true
         },
         {
-            "id": "should be at least 3 characters long",
-            "message": "should be at least 3 characters long",
-            "translation": "should be at least 3 characters long",
+            "id": "cannot be empty",
+            "message": "cannot be empty",
+            "translation": "cannot be empty",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },
@@ -19,6 +19,20 @@
             "id": "should be at least 8 characters long",
             "message": "should be at least 8 characters long",
             "translation": "should be at least 8 characters long",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "should be 26 bytes long",
+            "message": "should be 26 bytes long",
+            "translation": "should be 26 bytes long",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
+            "id": "should be at least 3 characters long",
+            "message": "should be at least 3 characters long",
+            "translation": "should be at least 3 characters long",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         }
