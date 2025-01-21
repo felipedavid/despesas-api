@@ -10,17 +10,17 @@ import (
 )
 
 func registerUser(w http.ResponseWriter, r *http.Request) error {
-	var createUserParams service.RegisterUserParams
-	err := readJSON(r, &createUserParams)
+	params := service.NewRegisterUserParams(r.Context())
+	err := readJSON(r, &params)
 	if err != nil {
 		return BadRequestError(err.Error())
 	}
 
-	if !createUserParams.Valid() {
-		return ValidationError(createUserParams.Errors)
+	if !params.Valid() {
+		return ValidationError(params.Errors)
 	}
 
-	newUser := createUserParams.Model()
+	newUser := params.Model()
 	err = storage.InsertUser(context.Background(), newUser)
 	if err != nil {
 		if errors.Is(err, storage.ErrDuplicatedEmail) {
@@ -33,14 +33,14 @@ func registerUser(w http.ResponseWriter, r *http.Request) error {
 }
 
 func authenticateUser(w http.ResponseWriter, r *http.Request) error {
-	var userAuthParams service.UserAuthParams
-	err := readJSON(r, &userAuthParams)
+	params := service.NewUserAuthParams(r.Context())
+	err := readJSON(r, &params)
 	if err != nil {
 		return BadRequestError(err.Error())
 	}
 
-	if !userAuthParams.Valid() {
-		return ValidationError(userAuthParams.Errors)
+	if !params.Valid() {
+		return ValidationError(params.Errors)
 	}
 
 	token := map[string]any{}

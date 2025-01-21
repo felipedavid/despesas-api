@@ -1,6 +1,9 @@
 package service
 
 import (
+	"context"
+
+	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
 )
 
@@ -10,7 +13,13 @@ type RegisterUserParams struct {
 	Password    *string `json:"password"`
 	PhoneNumber *string `json:"phone_number"`
 
-	Validator
+	*Validator
+}
+
+func NewRegisterUserParams(ctx context.Context) *RegisterUserParams {
+	return &RegisterUserParams{
+		Validator: NewValidator(helpers.GetTranslator(ctx)),
+	}
 }
 
 func (p *RegisterUserParams) Valid() bool {
@@ -45,7 +54,13 @@ func (p *RegisterUserParams) Model() *models.User {
 type UserAuthParams struct {
 	Email    *string `json:"email"`
 	Password *string `json:"password"`
-	Validator
+	*Validator
+}
+
+func NewUserAuthParams(ctx context.Context) *UserAuthParams {
+	return &UserAuthParams{
+		Validator: NewValidator(helpers.GetTranslator(ctx)),
+	}
 }
 
 func (p *UserAuthParams) Valid() bool {

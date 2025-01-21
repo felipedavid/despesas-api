@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
 )
 
@@ -17,11 +18,11 @@ type CreateAccountParams struct {
 
 func NewCreateAccountParams(ctx context.Context) *CreateAccountParams {
 	return &CreateAccountParams{
-		Validator: NewValidator(ctx),
+		Validator: NewValidator(helpers.GetTranslator(ctx)),
 	}
 }
 
-func (p *CreateAccountParams) Validate(ctx context.Context) bool {
+func (p *CreateAccountParams) Validate() bool {
 	p.Check(p.Name != nil, "name", "must be provided")
 	p.Check(p.Type != nil, "type", "must be provided")
 	p.Check(p.Balance != nil, "balance", "must be provided")

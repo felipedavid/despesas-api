@@ -3,6 +3,7 @@ package middleware
 import (
 	"context"
 	"net/http"
+	"strings"
 
 	"github.com/felipedavid/saldop/translations"
 )
@@ -12,7 +13,7 @@ func SpecifyLanguage(next http.Handler) http.Handler {
 		var translator *translations.Translator
 
 		language := r.Header.Get("Accept-Language")
-		if language == "pt-br" {
+		if strings.ToLower(language) == "pt-br" {
 			translator = translations.PtTranslator
 		} else {
 			translator = translations.EnTranslator

@@ -10,17 +10,17 @@ import (
 )
 
 func createTransaction(w http.ResponseWriter, r *http.Request) error {
-	var createTransactionParams service.CreateTransactionParams
-	err := readJSON(r, &createTransactionParams)
+	params := service.NewCreateTransactionParams(r.Context())
+	err := readJSON(r, &params)
 	if err != nil {
 		return BadRequestError(err.Error())
 	}
 
-	if !createTransactionParams.Valid() {
-		return ValidationError(createTransactionParams.Errors)
+	if !params.Valid() {
+		return ValidationError(params.Errors)
 	}
 
-	newTransaction := createTransactionParams.Model(1)
+	newTransaction := params.Model(1)
 	err = storage.InsertTransaction(context.Background(), newTransaction)
 	if err != nil {
 		return err

@@ -1,8 +1,10 @@
 package service
 
 import (
+	"context"
 	"time"
 
+	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
 )
 
@@ -14,7 +16,13 @@ type CreateTransactionParams struct {
 	TransactionDate *time.Time `json:"transaction_date"`
 	CategoryID      *int       `json:"category_id"`
 
-	Validator
+	*Validator
+}
+
+func NewCreateTransactionParams(ctx context.Context) *CreateTransactionParams {
+	return &CreateTransactionParams{
+		Validator: NewValidator(helpers.GetTranslator(ctx)),
+	}
 }
 
 func (p *CreateTransactionParams) Valid() bool {
