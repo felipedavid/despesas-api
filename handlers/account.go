@@ -10,7 +10,7 @@ import (
 )
 
 func handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
-	var createAccountParams service.CreateAccountParams
+	createAccountParams := service.NewCreateAccountParams(r.Context())
 	err := readJSON(r, &createAccountParams)
 	if err != nil {
 		return BadRequestError(err.Error())

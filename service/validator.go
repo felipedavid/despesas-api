@@ -1,10 +1,23 @@
 package service
 
-import "github.com/felipedavid/saldop/localizer"
+import (
+	"context"
+
+	"github.com/felipedavid/saldop/helpers"
+	"github.com/felipedavid/saldop/translations"
+)
 
 type Validator struct {
-	Localizer *localizer.Localizer
-	Errors    map[string]string
+	Errors map[string]string
+	*translations.Translator
+}
+
+func NewValidator(ctx context.Context) *Validator {
+	var v Validator
+	v.Errors = make(map[string]string)
+	v.Translator = helpers.GetTranslator(ctx)
+
+	return &v
 }
 
 func (v *Validator) Check(valid bool, attr string, errMsg string) {
@@ -13,6 +26,6 @@ func (v *Validator) Check(valid bool, attr string, errMsg string) {
 	}
 
 	if !valid {
-		v.Errors[attr] = v.Localizer.Translate(errMsg)
+		v.Errors[attr] = v.Translate(errMsg)
 	}
 }

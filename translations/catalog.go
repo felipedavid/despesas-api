@@ -53,9 +53,11 @@ const en_USData string = "" + // Size: 91 bytes
 	"e at least 8 characters long"
 
 var pt_BRIndex = []uint32{ // 4 elements
-	0x00000000, 0x00000000, 0x00000000, 0x00000000,
+	0x00000000, 0x00000016, 0x00000036, 0x00000056,
 } // Size: 40 bytes
 
-const pt_BRData string = ""
+const pt_BRData string = "" + // Size: 86 bytes
+	"\x02precisa ser informado\x02deve ter pelomenos 3 caracteres\x02deve ter" +
+	" pelomenos 8 caracteres"
 
-// Total table size 171 bytes (0KiB); checksum: E95B0D35
+	// Total table size 257 bytes (0KiB); checksum: FBB5ABB6

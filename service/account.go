@@ -3,7 +3,6 @@ package service
 import (
 	"context"
 
-	"github.com/felipedavid/saldop/localizer"
 	"github.com/felipedavid/saldop/models"
 )
 
@@ -13,14 +12,13 @@ type CreateAccountParams struct {
 	Balance      *int    `json:"balance"`
 	CurrencyCode *string `json:"currency_code"`
 
-	Validator
+	*Validator
 }
 
 func NewCreateAccountParams(ctx context.Context) *CreateAccountParams {
-	var params CreateAccountParams
-	params.Validator.Localizer, _ = localizer.Get(ctx.Value("language").(string))
-
-	return &params
+	return &CreateAccountParams{
+		Validator: NewValidator(ctx),
+	}
 }
 
 func (p *CreateAccountParams) Validate(ctx context.Context) bool {
