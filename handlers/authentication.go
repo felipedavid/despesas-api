@@ -8,7 +8,7 @@ import (
 	"github.com/markbates/goth/gothic"
 )
 
-func handleOauthAuthentication(w http.ResponseWriter, r *http.Request) error {
+func oauthAuthentication(w http.ResponseWriter, r *http.Request) error {
 	provider := r.PathValue("provider")
 	r = r.WithContext(context.WithValue(context.Background(), "provider", provider))
 
@@ -22,7 +22,7 @@ func handleOauthAuthentication(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func handleOauthCallback(w http.ResponseWriter, r *http.Request) error {
+func oauthCallback(w http.ResponseWriter, r *http.Request) error {
 	provider := r.PathValue("provider")
 	r = r.WithContext(context.WithValue(context.Background(), "provider", provider))
 

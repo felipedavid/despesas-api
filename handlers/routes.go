@@ -11,15 +11,15 @@ func SetupMultiplexer() http.Handler {
 
 	routes := map[string]customHandler{
 		"GET /healthcheck":                    healthcheck,
-		"GET /auth/{provider}/callback":       handleOauthCallback,
-		"GET /auth/{provider}":                handleOauthAuthentication,
-		"POST /user":                          handleRegisterUser,
-		"GET /transaction":                    handleListUserTransactions,
-		"POST /transaction":                   handleCreateTransaction,
-		"DELETE /transaction/{transactionID}": handleDeleteTransaction,
-		"POST /account":                       handleCreateAccount,
-		"DELETE /account/{accountID}":         handleDeleteAccount,
-		"GET /account":                        handleListUserAccounts,
+		"GET /auth/{provider}/callback":       oauthCallback,
+		"GET /auth/{provider}":                oauthAuthentication,
+		"POST /user":                          registerUser,
+		"GET /transaction":                    listUserTransactions,
+		"POST /transaction":                   createTransaction,
+		"DELETE /transaction/{transactionID}": deleteTransaction,
+		"POST /account":                       createAccount,
+		"DELETE /account/{accountID}":         deleteAccount,
+		"GET /account":                        listUserAccounts,
 	}
 
 	for path, handler := range routes {

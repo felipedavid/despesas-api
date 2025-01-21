@@ -9,7 +9,7 @@ import (
 	"github.com/felipedavid/saldop/storage"
 )
 
-func handleRegisterUser(w http.ResponseWriter, r *http.Request) error {
+func registerUser(w http.ResponseWriter, r *http.Request) error {
 	var createUserParams service.RegisterUserParams
 	err := readJSON(r, &createUserParams)
 	if err != nil {
@@ -32,7 +32,7 @@ func handleRegisterUser(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusCreated, newUser)
 }
 
-func handleUserAuthentication(w http.ResponseWriter, r *http.Request) error {
+func authenticateUser(w http.ResponseWriter, r *http.Request) error {
 	var userAuthParams service.UserAuthParams
 	err := readJSON(r, &userAuthParams)
 	if err != nil {

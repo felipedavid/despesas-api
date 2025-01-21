@@ -9,7 +9,7 @@ import (
 	"github.com/felipedavid/saldop/storage"
 )
 
-func handleCreateTransaction(w http.ResponseWriter, r *http.Request) error {
+func createTransaction(w http.ResponseWriter, r *http.Request) error {
 	var createTransactionParams service.CreateTransactionParams
 	err := readJSON(r, &createTransactionParams)
 	if err != nil {
@@ -29,7 +29,7 @@ func handleCreateTransaction(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusCreated, newTransaction)
 }
 
-func handleListUserTransactions(w http.ResponseWriter, r *http.Request) error {
+func listUserTransactions(w http.ResponseWriter, r *http.Request) error {
 	transactions, err := storage.ListUserTransactions(context.Background(), 1)
 	if err != nil {
 		return err
@@ -38,7 +38,7 @@ func handleListUserTransactions(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusOK, transactions)
 }
 
-func handleDeleteTransaction(w http.ResponseWriter, r *http.Request) error {
+func deleteTransaction(w http.ResponseWriter, r *http.Request) error {
 	transactionID, err := strconv.Atoi(r.PathValue("transactionID"))
 	if err != nil {
 		return BadRequestError(err.Error())

@@ -9,7 +9,7 @@ import (
 	"github.com/felipedavid/saldop/storage"
 )
 
-func handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
+func createAccount(w http.ResponseWriter, r *http.Request) error {
 	createAccountParams := service.NewCreateAccountParams(r.Context())
 	err := readJSON(r, &createAccountParams)
 	if err != nil {
@@ -29,7 +29,7 @@ func handleCreateAccount(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusCreated, newAccount)
 }
 
-func handleDeleteAccount(w http.ResponseWriter, r *http.Request) error {
+func deleteAccount(w http.ResponseWriter, r *http.Request) error {
 	accountID, err := strconv.Atoi(r.PathValue("accountID"))
 	if err != nil {
 		return BadRequestError(err.Error())
@@ -44,7 +44,7 @@ func handleDeleteAccount(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
-func handleListUserAccounts(w http.ResponseWriter, r *http.Request) error {
+func listUserAccounts(w http.ResponseWriter, r *http.Request) error {
 	accounts, err := storage.ListUserAccounts(context.Background(), 1)
 	if err != nil {
 		return err
