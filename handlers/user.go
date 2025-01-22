@@ -13,7 +13,7 @@ func registerUser(w http.ResponseWriter, r *http.Request) error {
 	params := service.NewRegisterUserParams(r.Context())
 	err := readJSON(r, &params)
 	if err != nil {
-		return BadRequestError(err.Error())
+		return BadRequestError(r.Context(), err.Error())
 	}
 
 	if !params.Valid() {
@@ -36,7 +36,7 @@ func authenticateUser(w http.ResponseWriter, r *http.Request) error {
 	params := service.NewUserAuthParams(r.Context())
 	err := readJSON(r, &params)
 	if err != nil {
-		return BadRequestError(err.Error())
+		return BadRequestError(r.Context(), err.Error())
 	}
 
 	if !params.Valid() {

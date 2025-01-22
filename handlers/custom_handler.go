@@ -1,9 +1,12 @@
 package handlers
 
 import (
+	"context"
 	"log/slog"
 	"net/http"
 	"runtime/debug"
+
+	"github.com/felipedavid/saldop/helpers"
 )
 
 type Error interface {
@@ -43,8 +46,9 @@ func ValidationError(paramsErrors map[string]string) Error {
 		}}
 }
 
-func BadRequestError(message string) Error {
-	return &ErrorResponse{code: http.StatusBadRequest, message: message}
+func BadRequestError(ctx context.Context, message string) Error {
+	t := helpers.GetTranslator(ctx)
+	return &ErrorResponse{code: http.StatusBadRequest, message: t.Translate(message)}
 }
 
 type customHandler func(w http.ResponseWriter, r *http.Request) error
@@ -58,10 +62,12 @@ func handleErrors(h customHandler) http.HandlerFunc {
 			case Error:
 				slog.Error(e.Error())
 
+				t := helpers.GetTranslator(r.Context())
+
 				resBody := map[string]any{
 					"title":   http.StatusText(e.Status()),
 					"status":  e.Status(),
-					"message": e.Error(),
+					"message": t.Translate(e.Error()),
 				}
 
 				for k, v := range e.AdditionalParams() {

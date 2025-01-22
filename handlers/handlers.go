@@ -1,6 +1,8 @@
 package handlers
 
-import "github.com/alexedwards/scs/v2"
+import (
+	"github.com/alexedwards/scs/v2"
+)
 
 var sessionManager *scs.SessionManager
 

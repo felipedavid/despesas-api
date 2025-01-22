@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/service"
 	"github.com/markbates/goth/gothic"
 )
@@ -15,10 +14,8 @@ func credentialsAuthentication(w http.ResponseWriter, r *http.Request) error {
 	params := service.NewCredentialsAuthenticationParams(r.Context())
 	err := readJSON(r, params)
 	if err != nil {
-		return BadRequestError(err.Error())
+		return BadRequestError(r.Context(), err.Error())
 	}
-
-	t := helpers.GetTranslator(r.Context())
 
 	err = service.CredentialsAuthentication(params)
 	if err != nil {
@@ -26,7 +23,7 @@ func credentialsAuthentication(w http.ResponseWriter, r *http.Request) error {
 		case errors.Is(err, service.ErrFailedValidation):
 			return ValidationError(params.Errors)
 		case errors.Is(err, service.ErrInvalidCredentials):
-			return BadRequestError(t.Translate("invalid credentials"))
+			return BadRequestError(r.Context(), "invalid credentials")
 		}
 
 		return err

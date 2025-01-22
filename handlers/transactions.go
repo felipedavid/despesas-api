@@ -13,7 +13,7 @@ func createTransaction(w http.ResponseWriter, r *http.Request) error {
 	params := service.NewCreateTransactionParams(r.Context())
 	err := readJSON(r, &params)
 	if err != nil {
-		return BadRequestError(err.Error())
+		return BadRequestError(r.Context(), err.Error())
 	}
 
 	if !params.Valid() {
@@ -41,7 +41,7 @@ func listUserTransactions(w http.ResponseWriter, r *http.Request) error {
 func deleteTransaction(w http.ResponseWriter, r *http.Request) error {
 	transactionID, err := strconv.Atoi(r.PathValue("transactionID"))
 	if err != nil {
-		return BadRequestError(err.Error())
+		return BadRequestError(r.Context(), err.Error())
 	}
 
 	err = storage.DeleteTransaction(context.Background(), 1, transactionID)

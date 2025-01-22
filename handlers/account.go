@@ -13,7 +13,7 @@ func createAccount(w http.ResponseWriter, r *http.Request) error {
 	createAccountParams := service.NewCreateAccountParams(r.Context())
 	err := readJSON(r, &createAccountParams)
 	if err != nil {
-		return BadRequestError(err.Error())
+		return BadRequestError(r.Context(), err.Error())
 	}
 
 	if !createAccountParams.Validate() {
@@ -32,7 +32,7 @@ func createAccount(w http.ResponseWriter, r *http.Request) error {
 func deleteAccount(w http.ResponseWriter, r *http.Request) error {
 	accountID, err := strconv.Atoi(r.PathValue("accountID"))
 	if err != nil {
-		return BadRequestError(err.Error())
+		return BadRequestError(r.Context(), err.Error())
 	}
 
 	err = storage.DeleteAccount(context.Background(), 1, accountID)
