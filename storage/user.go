@@ -139,6 +139,9 @@ func FindUserByEmail(ctx context.Context, email string) (*models.User, error) {
 		&user.DeletedAt,
 	)
 	if err != nil {
+		if err.Error() == "no rows in result set" {
+			return nil, ErrNoRows
+		}
 		return nil, err
 	}
 

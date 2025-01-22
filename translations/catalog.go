@@ -39,31 +39,32 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"cannot be empty":                      1,
-	"must be provided":                     0,
-	"should be 26 bytes long":              3,
-	"should be at least 3 characters long": 4,
-	"should be at least 8 characters long": 2,
+	"cannot be empty":                      2,
+	"invalid credentials":                  0,
+	"must be provided":                     1,
+	"should be 26 bytes long":              4,
+	"should be at least 3 characters long": 5,
+	"should be at least 8 characters long": 3,
 }
 
-var en_USIndex = []uint32{ // 6 elements
-	0x00000000, 0x00000011, 0x00000021, 0x00000046,
-	0x0000005e, 0x00000083,
-} // Size: 48 bytes
+var en_USIndex = []uint32{ // 7 elements
+	0x00000000, 0x00000014, 0x00000025, 0x00000035,
+	0x0000005a, 0x00000072, 0x00000097,
+} // Size: 52 bytes
 
-const en_USData string = "" + // Size: 131 bytes
-	"\x02must be provided\x02cannot be empty\x02should be at least 8 characte" +
-	"rs long\x02should be 26 bytes long\x02should be at least 3 characters lo" +
-	"ng"
+const en_USData string = "" + // Size: 151 bytes
+	"\x02invalid credentials\x02must be provided\x02cannot be empty\x02should" +
+	" be at least 8 characters long\x02should be 26 bytes long\x02should be a" +
+	"t least 3 characters long"
 
-var pt_BRIndex = []uint32{ // 6 elements
-	0x00000000, 0x00000016, 0x0000002c, 0x0000004c,
-	0x00000076, 0x00000096,
-} // Size: 48 bytes
+var pt_BRIndex = []uint32{ // 7 elements
+	0x00000000, 0x00000000, 0x00000016, 0x0000002c,
+	0x0000004c, 0x00000076, 0x00000096,
+} // Size: 52 bytes
 
 const pt_BRData string = "" + // Size: 150 bytes
 	"\x02precisa ser informado\x02não pode estar vazio\x02deve ter pelomenos " +
 	"8 caracteres\x02deveria ter pelomenos 26 bytes de tamanho\x02deve ter pe" +
 	"lomenos 3 caracteres"
 
-	// Total table size 377 bytes (0KiB); checksum: EB8914E9
+	// Total table size 405 bytes (0KiB); checksum: 6841F278

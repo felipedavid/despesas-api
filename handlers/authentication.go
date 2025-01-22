@@ -2,9 +2,11 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"fmt"
 	"net/http"
 
+	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/service"
 	"github.com/markbates/goth/gothic"
 )
@@ -16,9 +18,18 @@ func credentialsAuthentication(w http.ResponseWriter, r *http.Request) error {
 		return BadRequestError(err.Error())
 	}
 
-	// NOTE: Think about returning ValidationError() from .Valid()
-	if !params.Valid() {
-		return ValidationError(params.Errors)
+	t := helpers.GetTranslator(r.Context())
+
+	err = service.CredentialsAuthentication(params)
+	if err != nil {
+		switch {
+		case errors.Is(err, service.ErrFailedValidation):
+			return ValidationError(params.Errors)
+		case errors.Is(err, service.ErrInvalidCredentials):
+			return BadRequestError(t.Translate("invalid credentials"))
+		}
+
+		return err
 	}
 
 	return nil

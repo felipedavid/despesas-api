@@ -3,6 +3,7 @@ package handlers
 import (
 	"log/slog"
 	"net/http"
+	"runtime/debug"
 )
 
 type Error interface {
@@ -50,6 +51,7 @@ type customHandler func(w http.ResponseWriter, r *http.Request) error
 
 func handleErrors(h customHandler) http.HandlerFunc {
 	return func(w http.ResponseWriter, r *http.Request) {
+
 		err := h(w, r)
 		if err != nil {
 			switch e := err.(type) {
@@ -68,6 +70,8 @@ func handleErrors(h customHandler) http.HandlerFunc {
 
 				writeJSON(w, e.Status(), resBody)
 			default:
+				debug.PrintStack()
+
 				resBody := map[string]any{
 					"title":   http.StatusText(http.StatusInternalServerError),
 					"status":  http.StatusInternalServerError,

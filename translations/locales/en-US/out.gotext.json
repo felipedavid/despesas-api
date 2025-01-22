@@ -2,6 +2,13 @@
     "language": "en-US",
     "messages": [
         {
+            "id": "invalid credentials",
+            "message": "invalid credentials",
+            "translation": "invalid credentials",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "must be provided",
             "message": "must be provided",
             "translation": "must be provided",

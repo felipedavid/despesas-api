@@ -2,6 +2,11 @@
     "language": "pt-BR",
     "messages": [
         {
+            "id": "invalid credentials",
+            "message": "invalid credentials",
+            "translation": ""
+        },
+        {
             "id": "must be provided",
             "message": "must be provided",
             "translation": "precisa ser informado"
