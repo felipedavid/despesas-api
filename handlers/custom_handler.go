@@ -47,8 +47,7 @@ func ValidationError(paramsErrors map[string]string) Error {
 }
 
 func BadRequestError(ctx context.Context, message string) Error {
-	t := helpers.GetTranslator(ctx)
-	return &ErrorResponse{code: http.StatusBadRequest, message: t.Translate(message)}
+	return &ErrorResponse{code: http.StatusBadRequest, message: message}
 }
 
 type customHandler func(w http.ResponseWriter, r *http.Request) error
@@ -79,9 +78,10 @@ func handleErrors(h customHandler) http.HandlerFunc {
 				debug.PrintStack()
 
 				resBody := map[string]any{
-					"title":   http.StatusText(http.StatusInternalServerError),
-					"status":  http.StatusInternalServerError,
-					"message": "Something unexpected happen",
+					"title":          http.StatusText(http.StatusInternalServerError),
+					"status":         http.StatusInternalServerError,
+					"message":        "Something unexpected happen",
+					"internal_error": err.Error(),
 				}
 
 				writeJSON(w, http.StatusInternalServerError, resBody)

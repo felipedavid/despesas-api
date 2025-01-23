@@ -39,7 +39,7 @@ func generateToken(userID int, ttl time.Duration, scope models.TokenScope) (*mod
 	return token, nil
 }
 
-func NewToken(userID int, ttl time.Duration, scope models.TokenScope) (*models.Token, error) {
+func CreateToken(userID int, ttl time.Duration, scope models.TokenScope) (*models.Token, error) {
 	t, err := generateToken(userID, ttl, scope)
 	if err != nil {
 		return nil, err

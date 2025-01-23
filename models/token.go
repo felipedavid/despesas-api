@@ -7,13 +7,13 @@ import (
 type TokenScope string
 
 const (
-	Authentication = "authentication"
+	TokenScopeAuthentication = "authentication"
 )
 
 type Token struct {
-	Plaintext string     `json:"token"`
+	Plaintext string     `json:"value"`
 	Hash      []byte     `json:"-"`
 	UserID    int        `json:"-"`
-	Expiry    time.Time  `json:"expiry`
+	Expiry    time.Time  `json:"expiry"`
 	Scope     TokenScope `json:"-"`
 }

@@ -1,9 +1,3 @@
-CREATE TABLE token (
-    hash BYTEA PRIMARY KEY,
-    user_id INTEGER REFERENCES users (id) NOT NULL,
-    expiry TIMESTAMPTZ NOT NULL
-    scope TEXT NOT NULL
-);
 
 CREATE TABLE users (
     id SERIAL PRIMARY KEY,
@@ -19,6 +13,13 @@ CREATE TABLE users (
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMPTZ
+);
+
+CREATE TABLE token (
+    hash BYTEA PRIMARY KEY,
+    user_id INTEGER REFERENCES users (id) NOT NULL,
+    expiry TIMESTAMPTZ NOT NULL,
+    scope TEXT NOT NULL
 );
 
 CREATE TABLE address (

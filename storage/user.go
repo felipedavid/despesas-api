@@ -148,6 +148,49 @@ func FindUserByEmail(ctx context.Context, email string) (*models.User, error) {
 	return &user, nil
 }
 
-func GetUserByToken(tokenScope models.TokenScope, tokenPlainText string) (*models.User, error) {
+func GetUserByToken(ctx context.Context, scope models.TokenScope, token string) (*models.User, error) {
+	query := `
+		SELECT
+		 	users.id,
+			users.name,
+			users.email,
+			users.password,
+			users.phone_number,
+			users.birth_date,
+			users.job_title,
+			users.company_name,
+			users.document,
+			users.document_type,
+			users.created_at,
+			users.updated_at,
+			users.deleted_at
+		FROM users
+        INNER JOIN token ON token.user_id = users.id
+		WHERE token.hash = $1 AND token.scope = $2 AND tokens.expiry > NOW()
+    `
+
+	var user models.User
+	err := conn.QueryRow(ctx, query, token, scope).Scan(
+		&user.ID,
+		&user.Name,
+		&user.Email,
+		&user.Password,
+		&user.PhoneNumber,
+		&user.BirthDate,
+		&user.JobTitle,
+		&user.CompanyName,
+		&user.Document,
+		&user.DocumentType,
+		&user.CreatedAt,
+		&user.UpdatedAt,
+		&user.DeletedAt,
+	)
+	if err != nil {
+		if err.Error() == "no rows in result set" {
+			return nil, ErrNoRows
+		}
+		return nil, err
+	}
+
 	return nil, nil
 }

@@ -3,8 +3,10 @@ package service
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/felipedavid/saldop/helpers"
+	"github.com/felipedavid/saldop/models"
 	"github.com/felipedavid/saldop/storage"
 	"github.com/felipedavid/saldop/validator"
 )
@@ -39,21 +41,36 @@ func (p *CredentialsAuthenticationParams) Valid() bool {
 var ErrFailedValidation = errors.New(`failed validation`)
 var ErrInvalidCredentials = errors.New(`invalid credentials`)
 
-func CredentialsAuthentication(params *CredentialsAuthenticationParams) error {
+type AuthenticationResponse struct {
+	User  *models.User  `json:"user"`
+	Token *models.Token `json:"token"`
+}
+
+func CredentialsAuthentication(params *CredentialsAuthenticationParams) (*AuthenticationResponse, error) {
 	if !params.Valid() {
-		return ErrFailedValidation
+		return nil, ErrFailedValidation
 	}
 
 	user, err := storage.FindUserByEmail(context.Background(), *params.Email)
 	switch {
 	case err == nil:
 	case errors.Is(err, storage.ErrNoRows):
-		return ErrInvalidCredentials
+		return nil, ErrInvalidCredentials
+	default:
+		return nil, err
 	}
 
 	if user.Password != *params.Password {
-		return ErrInvalidCredentials
+		return nil, ErrInvalidCredentials
 	}
 
-	return nil
+	token, err := CreateToken(user.ID, 24*time.Hour, models.TokenScopeAuthentication)
+	if err != nil {
+		return nil, err
+	}
+
+	return &AuthenticationResponse{
+		User:  user,
+		Token: token,
+	}, nil
 }

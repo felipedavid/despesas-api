@@ -17,7 +17,7 @@ func credentialsAuthentication(w http.ResponseWriter, r *http.Request) error {
 		return BadRequestError(r.Context(), err.Error())
 	}
 
-	err = service.CredentialsAuthentication(params)
+	res, err := service.CredentialsAuthentication(params)
 	if err != nil {
 		switch {
 		case errors.Is(err, service.ErrFailedValidation):
@@ -29,7 +29,7 @@ func credentialsAuthentication(w http.ResponseWriter, r *http.Request) error {
 		return err
 	}
 
-	return nil
+	return writeJSON(w, http.StatusOK, res)
 }
 
 func oauthAuthentication(w http.ResponseWriter, r *http.Request) error {
