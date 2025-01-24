@@ -1,35 +1,27 @@
 package handlers
 
 import (
-	"context"
-	"errors"
 	"net/http"
 
 	"github.com/felipedavid/saldop/service"
-	"github.com/felipedavid/saldop/storage"
 )
 
 func registerUser(w http.ResponseWriter, r *http.Request) error {
 	params := service.NewRegisterUserParams(r.Context())
-	err := readJSON(r, &params)
+	err := readJSON(r, params)
 	if err != nil {
 		return BadRequestError(r.Context(), err.Error())
 	}
 
-	if !params.Valid() {
-		return ValidationError(params.Errors)
-	}
+	// NOTE: Maybe I can do the json parsing the "New" that creates the parameter. So I don't need
+	// to call readJSON on the controller anymore
 
-	newUser := params.Model()
-	err = storage.InsertUser(context.Background(), newUser)
+	res, err := service.RegisterUser(params)
 	if err != nil {
-		if errors.Is(err, storage.ErrDuplicatedEmail) {
-			return ErrorRes(http.StatusConflict, err.Error(), nil)
-		}
 		return err
 	}
 
-	return writeJSON(w, http.StatusCreated, newUser)
+	return writeJSON(w, http.StatusCreated, res)
 }
 
 func authenticateUser(w http.ResponseWriter, r *http.Request) error {

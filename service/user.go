@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
+	"github.com/felipedavid/saldop/storage"
 	"github.com/felipedavid/saldop/validator"
 )
 
@@ -41,6 +43,23 @@ func (p *RegisterUserParams) Valid() bool {
 	}
 
 	return len(p.Errors) == 0
+}
+
+func RegisterUser(params *RegisterUserParams) (*AuthenticationResponse, error) {
+	if !params.Valid() {
+		return nil, ErrFailedValidation
+	}
+
+	newUser := params.Model()
+	err := storage.InsertUser(context.Background(), newUser)
+	if err != nil {
+		if errors.Is(err, storage.ErrDuplicatedEmail) {
+			return nil, err
+		}
+		return nil, err
+	}
+
+	return nil, nil
 }
 
 func (p *RegisterUserParams) Model() *models.User {
