@@ -9,6 +9,7 @@ import (
 	"github.com/felipedavid/saldop/models"
 	"github.com/felipedavid/saldop/storage"
 	"github.com/felipedavid/saldop/validator"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type CredentialsAuthenticationParams struct {
@@ -60,7 +61,8 @@ func CredentialsAuthentication(params *CredentialsAuthenticationParams) (*Authen
 		return nil, err
 	}
 
-	if user.Password != *params.Password {
+	err = bcrypt.CompareHashAndPassword(user.Password, []byte(*params.Password))
+	if err != nil {
 		return nil, ErrInvalidCredentials
 	}
 

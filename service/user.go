@@ -8,6 +8,7 @@ import (
 	"github.com/felipedavid/saldop/models"
 	"github.com/felipedavid/saldop/storage"
 	"github.com/felipedavid/saldop/validator"
+	"golang.org/x/crypto/bcrypt"
 )
 
 type RegisterUserParams struct {
@@ -45,13 +46,25 @@ func (p *RegisterUserParams) Valid() bool {
 	return len(p.Errors) == 0
 }
 
+var ErrUnableToHashPassword = errors.New(`unable to hash passwords`)
+
 func RegisterUser(params *RegisterUserParams) (*AuthenticationResponse, error) {
 	if !params.Valid() {
 		return nil, ErrFailedValidation
 	}
 
-	newUser := params.Model()
-	err := storage.InsertUser(context.Background(), newUser)
+	hashedPassword, err := bcrypt.GenerateFromPassword([]byte(*params.Password), bcrypt.DefaultCost)
+	if err != nil {
+		return nil, ErrUnableToHashPassword
+	}
+
+	newUser := &models.User{
+		Name:        *params.Name,
+		Email:       *params.Email,
+		Password:    hashedPassword,
+		PhoneNumber: params.PhoneNumber,
+	}
+	err = storage.InsertUser(context.Background(), newUser)
 	if err != nil {
 		if errors.Is(err, storage.ErrDuplicatedEmail) {
 			return nil, err
@@ -60,15 +73,6 @@ func RegisterUser(params *RegisterUserParams) (*AuthenticationResponse, error) {
 	}
 
 	return nil, nil
-}
-
-func (p *RegisterUserParams) Model() *models.User {
-	return &models.User{
-		Name:        *p.Name,
-		Email:       *p.Email,
-		Password:    *p.Password,
-		PhoneNumber: p.PhoneNumber,
-	}
 }
 
 type UserAuthParams struct {

@@ -8,13 +8,9 @@ import (
 
 func registerUser(w http.ResponseWriter, r *http.Request) error {
 	params := service.NewRegisterUserParams(r.Context())
-	err := readJSON(r, params)
-	if err != nil {
+	if err := readJSON(r, params); err != nil {
 		return BadRequestError(r.Context(), err.Error())
 	}
-
-	// NOTE: Maybe I can do the json parsing the "New" that creates the parameter. So I don't need
-	// to call readJSON on the controller anymore
 
 	res, err := service.RegisterUser(params)
 	if err != nil {

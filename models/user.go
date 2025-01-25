@@ -6,7 +6,7 @@ type User struct {
 	ID           int        `db:"id" json:"id"`
 	Name         string     `db:"name" json:"name"`
 	Email        string     `db:"email" json:"email"`
-	Password     string     `db:"password" json:"-"`
+	Password     []byte     `db:"password" json:"-"`
 	PhoneNumber  *string    `db:"phone_number" json:"phone_number"`
 	BirthDate    *time.Time `db:"birth_date" json:"-"`
 	JobTitle     *string    `db:"job_title" json:"-"`
