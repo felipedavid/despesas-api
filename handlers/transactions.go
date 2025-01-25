@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/service"
 	"github.com/felipedavid/saldop/storage"
 )
@@ -20,7 +21,12 @@ func createTransaction(w http.ResponseWriter, r *http.Request) error {
 		return ValidationError(params.Errors)
 	}
 
-	newTransaction := params.Model(1)
+	user := helpers.GetUserFromRequestContext(r)
+	if user == nil {
+		return UnauthenticatedError(r.Context())
+	}
+
+	newTransaction := params.Model(user.ID)
 	err = storage.InsertTransaction(context.Background(), newTransaction)
 	if err != nil {
 		return err
@@ -30,7 +36,12 @@ func createTransaction(w http.ResponseWriter, r *http.Request) error {
 }
 
 func listUserTransactions(w http.ResponseWriter, r *http.Request) error {
-	transactions, err := storage.ListUserTransactions(context.Background(), 1)
+	user := helpers.GetUserFromRequestContext(r)
+	if user == nil {
+		return UnauthenticatedError(r.Context())
+	}
+
+	transactions, err := storage.ListUserTransactions(context.Background(), user.ID)
 	if err != nil {
 		return err
 	}

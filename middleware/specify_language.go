@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/translations"
 )
 
@@ -19,7 +20,7 @@ func SpecifyLanguage(next http.Handler) http.Handler {
 			translator = translations.EnTranslator
 		}
 
-		r = r.WithContext(context.WithValue(r.Context(), "translator", translator))
+		r = r.WithContext(context.WithValue(r.Context(), helpers.TranslatorContextKey, translator))
 		next.ServeHTTP(w, r)
 	}
 

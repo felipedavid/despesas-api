@@ -27,5 +27,5 @@ func SetupMultiplexer() http.Handler {
 		mux.HandleFunc(path, handleErrors(handler))
 	}
 
-	return sessionManager.LoadAndSave(middleware.LogRequest(middleware.SpecifyLanguage(mux)))
+	return middleware.LogRequest(middleware.Auth(middleware.SpecifyLanguage(mux)))
 }

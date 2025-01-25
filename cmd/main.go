@@ -6,7 +6,6 @@ import (
 	"log/slog"
 	"net/http"
 
-	"github.com/alexedwards/scs/v2"
 	"github.com/felipedavid/saldop/handlers"
 	"github.com/felipedavid/saldop/storage"
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -38,18 +37,6 @@ func runApp() error {
 	}
 
 	storage.Init(connPool)
-
-	//store := sessions.NewCookieStore([]byte("alsdfjasd8fajsdf8jasdfjkj"))
-	//gothic.Store = store
-
-	//gProvider := google.New(cfg.GoogleOauthClientID, cfg.GoogleOauthClientSecret, "http://localhost:8080/auth/google/callback")
-	//goth.UseProviders(gProvider)
-
-	sessionManager := scs.New()
-	//sessionManager.Lifetime = 24 * time.Hour
-	//sessionManager.Store = connPool
-
-	handlers.Init(sessionManager)
 
 	slog.Info("Starting http server", "addr", cfg.Addr)
 

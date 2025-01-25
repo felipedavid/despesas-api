@@ -2,6 +2,7 @@ package storage
 
 import (
 	"context"
+	"crypto/sha256"
 	"errors"
 
 	"github.com/felipedavid/saldop/models"
@@ -149,6 +150,8 @@ func FindUserByEmail(ctx context.Context, email string) (*models.User, error) {
 }
 
 func GetUserByToken(ctx context.Context, scope models.TokenScope, token string) (*models.User, error) {
+	tokenHash := sha256.Sum256([]byte(token))
+
 	query := `
 		SELECT
 		 	users.id,
@@ -166,11 +169,11 @@ func GetUserByToken(ctx context.Context, scope models.TokenScope, token string) 
 			users.deleted_at
 		FROM users
         INNER JOIN token ON token.user_id = users.id
-		WHERE token.hash = $1 AND token.scope = $2 AND tokens.expiry > NOW()
+		WHERE token.hash = $1 AND token.scope = $2 AND token.expiry > NOW()
     `
 
 	var user models.User
-	err := conn.QueryRow(ctx, query, token, scope).Scan(
+	err := conn.QueryRow(ctx, query, tokenHash[:], scope).Scan(
 		&user.ID,
 		&user.Name,
 		&user.Email,
@@ -192,5 +195,5 @@ func GetUserByToken(ctx context.Context, scope models.TokenScope, token string) 
 		return nil, err
 	}
 
-	return nil, nil
+	return &user, nil
 }

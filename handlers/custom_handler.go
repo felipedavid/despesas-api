@@ -50,6 +50,10 @@ func BadRequestError(ctx context.Context, message string) Error {
 	return &ErrorResponse{code: http.StatusBadRequest, message: message}
 }
 
+func UnauthenticatedError(ctx context.Context) Error {
+	return &ErrorResponse{code: http.StatusBadRequest, message: "user is not authenticated"}
+}
+
 type customHandler func(w http.ResponseWriter, r *http.Request) error
 
 func handleErrors(h customHandler) http.HandlerFunc {

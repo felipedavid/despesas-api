@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/service"
 	"github.com/felipedavid/saldop/storage"
 )
@@ -20,7 +21,12 @@ func createAccount(w http.ResponseWriter, r *http.Request) error {
 		return ValidationError(createAccountParams.Errors)
 	}
 
-	newAccount := createAccountParams.Model(1)
+	user := helpers.GetUserFromRequestContext(r)
+	if user == nil {
+		return UnauthenticatedError(r.Context())
+	}
+
+	newAccount := createAccountParams.Model(user.ID)
 	err = storage.InsertAccount(context.Background(), newAccount)
 	if err != nil {
 		return err
@@ -35,7 +41,12 @@ func deleteAccount(w http.ResponseWriter, r *http.Request) error {
 		return BadRequestError(r.Context(), err.Error())
 	}
 
-	err = storage.DeleteAccount(context.Background(), 1, accountID)
+	user := helpers.GetUserFromRequestContext(r)
+	if user == nil {
+		return UnauthenticatedError(r.Context())
+	}
+
+	err = storage.DeleteAccount(context.Background(), user.ID, accountID)
 	if err != nil {
 		return err
 	}

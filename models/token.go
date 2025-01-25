@@ -7,7 +7,7 @@ import (
 type TokenScope string
 
 const (
-	TokenScopeAuthentication = "authentication"
+	TokenScopeAuthentication TokenScope = "authentication"
 )
 
 type Token struct {
