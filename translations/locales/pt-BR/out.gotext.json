@@ -2,9 +2,19 @@
     "language": "pt-BR",
     "messages": [
         {
-            "id": "invalid credentials",
-            "message": "invalid credentials",
-            "translation": ""
+            "id": "should be greater than zero",
+            "message": "should be greater than zero",
+            "translation": "deve ser maior que zero"
+        },
+        {
+            "id": "cannot be greater than 200",
+            "message": "cannot be greater than 200",
+            "translation": "não pode ser maior que 200"
+        },
+        {
+            "id": "must be an integer value",
+            "message": "must be an integer value",
+            "translation": "precisa ser um inteiro"
         },
         {
             "id": "must be provided",

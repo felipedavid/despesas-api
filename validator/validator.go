@@ -30,3 +30,16 @@ func (v *Validator) Check(valid bool, attr string, errMsg string) {
 		v.Errors[attr] = msg
 	}
 }
+
+func (v *Validator) AddError(attr, error string) {
+	if v.Errors == nil {
+		v.Errors = make(map[string]string)
+	}
+
+	msg := error
+	if v.Translator != nil {
+		msg = v.Translate(error)
+	}
+
+	v.Errors[attr] = msg
+}

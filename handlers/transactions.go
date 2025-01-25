@@ -41,6 +41,11 @@ func listUserTransactions(w http.ResponseWriter, r *http.Request) error {
 		return UnauthenticatedError(r.Context())
 	}
 
+	filters := newQueryFilters(r)
+	if !filters.Valid() {
+		return QueryValidationError(filters.Errors)
+	}
+
 	transactions, err := storage.ListUserTransactions(context.Background(), user.ID)
 	if err != nil {
 		return err

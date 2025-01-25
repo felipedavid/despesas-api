@@ -39,32 +39,38 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"cannot be empty":                      2,
-	"invalid credentials":                  0,
-	"must be provided":                     1,
-	"should be 26 bytes long":              4,
-	"should be at least 3 characters long": 5,
-	"should be at least 8 characters long": 3,
+	"cannot be empty":                      4,
+	"cannot be greater than 200":           1,
+	"must be an integer value":             2,
+	"must be provided":                     3,
+	"should be 26 bytes long":              6,
+	"should be at least 3 characters long": 7,
+	"should be at least 8 characters long": 5,
+	"should be greater than zero":          0,
 }
 
-var en_USIndex = []uint32{ // 7 elements
-	0x00000000, 0x00000014, 0x00000025, 0x00000035,
-	0x0000005a, 0x00000072, 0x00000097,
-} // Size: 52 bytes
+var en_USIndex = []uint32{ // 9 elements
+	0x00000000, 0x0000001c, 0x00000037, 0x00000050,
+	0x00000061, 0x00000071, 0x00000096, 0x000000ae,
+	0x000000d3,
+} // Size: 60 bytes
 
-const en_USData string = "" + // Size: 151 bytes
-	"\x02invalid credentials\x02must be provided\x02cannot be empty\x02should" +
-	" be at least 8 characters long\x02should be 26 bytes long\x02should be a" +
-	"t least 3 characters long"
+const en_USData string = "" + // Size: 211 bytes
+	"\x02should be greater than zero\x02cannot be greater than 200\x02must be" +
+	" an integer value\x02must be provided\x02cannot be empty\x02should be at" +
+	" least 8 characters long\x02should be 26 bytes long\x02should be at leas" +
+	"t 3 characters long"
 
-var pt_BRIndex = []uint32{ // 7 elements
-	0x00000000, 0x00000000, 0x00000016, 0x0000002c,
-	0x0000004c, 0x00000076, 0x00000096,
-} // Size: 52 bytes
+var pt_BRIndex = []uint32{ // 9 elements
+	0x00000000, 0x00000018, 0x00000034, 0x0000004b,
+	0x00000061, 0x00000077, 0x00000097, 0x000000c1,
+	0x000000e1,
+} // Size: 60 bytes
 
-const pt_BRData string = "" + // Size: 150 bytes
-	"\x02precisa ser informado\x02não pode estar vazio\x02deve ter pelomenos " +
-	"8 caracteres\x02deveria ter pelomenos 26 bytes de tamanho\x02deve ter pe" +
-	"lomenos 3 caracteres"
+const pt_BRData string = "" + // Size: 225 bytes
+	"\x02deve ser maior que zero\x02não pode ser maior que 200\x02precisa ser" +
+	" um inteiro\x02precisa ser informado\x02não pode estar vazio\x02deve ter" +
+	" pelomenos 8 caracteres\x02deveria ter pelomenos 26 bytes de tamanho\x02" +
+	"deve ter pelomenos 3 caracteres"
 
-	// Total table size 405 bytes (0KiB); checksum: 6841F278
+	// Total table size 556 bytes (0KiB); checksum: D10831F4

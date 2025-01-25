@@ -47,6 +47,7 @@ func (p *RegisterUserParams) Valid() bool {
 }
 
 var ErrUnableToHashPassword = errors.New(`unable to hash passwords`)
+var ErrDuplicatedEmail = errors.New(`duplicated email`)
 
 func RegisterUser(params *RegisterUserParams) (*AuthenticationResponse, error) {
 	if !params.Valid() {

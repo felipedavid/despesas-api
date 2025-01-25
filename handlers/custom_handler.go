@@ -46,6 +46,15 @@ func ValidationError(paramsErrors map[string]string) Error {
 		}}
 }
 
+func QueryValidationError(paramsErrors map[string]string) Error {
+	return &ErrorResponse{
+		code:    http.StatusBadRequest,
+		message: "invalid query params",
+		additionalParams: map[string]any{
+			"param_errors": paramsErrors,
+		}}
+}
+
 func BadRequestError(ctx context.Context, message string) Error {
 	return &ErrorResponse{code: http.StatusBadRequest, message: message}
 }
