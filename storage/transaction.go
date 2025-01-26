@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 
+	"github.com/felipedavid/saldop/filters"
 	"github.com/felipedavid/saldop/models"
 )
 
@@ -46,9 +47,10 @@ func InsertTransaction(ctx context.Context, t *models.Transaction) error {
 	return nil
 }
 
-func ListUserTransactions(ctx context.Context, userID int) ([]models.Transaction, error) {
+func ListUserTransactions(ctx context.Context, userID int, f *filters.Filters) ([]models.Transaction, error) {
 	query := `
 		SELECT
+            count(*) OVER(),
 			id,
 			external_id,
 			user_id,
@@ -65,18 +67,21 @@ func ListUserTransactions(ctx context.Context, userID int) ([]models.Transaction
 			updated_at
 		FROM transaction
 		WHERE user_id = $1 AND deleted_at IS NULL
+        LIMIT $2 OFFSET $3
 	`
 
-	rows, err := conn.Query(ctx, query, userID)
+	rows, err := conn.Query(ctx, query, userID, f.Limit(), f.Offset())
 	if err != nil {
 		return nil, err
 	}
 	defer rows.Close()
 
-	var transactions []models.Transaction
+	totalRecords := 0
+	transactions := make([]models.Transaction, 0, f.PageSize)
 	for rows.Next() {
 		var t models.Transaction
 		err := rows.Scan(
+			&totalRecords,
 			&t.ID,
 			&t.ExternalID,
 			&t.UserID,
@@ -98,6 +103,8 @@ func ListUserTransactions(ctx context.Context, userID int) ([]models.Transaction
 
 		transactions = append(transactions, t)
 	}
+
+	f.SetTotalRecords(totalRecords)
 
 	return transactions, nil
 }

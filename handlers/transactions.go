@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/felipedavid/saldop/filters"
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/service"
 	"github.com/felipedavid/saldop/storage"
@@ -41,17 +42,20 @@ func listUserTransactions(w http.ResponseWriter, r *http.Request) error {
 		return UnauthenticatedError(r.Context())
 	}
 
-	filters := newQueryFilters(r)
+	filters := filters.NewQueryFilters(r)
 	if !filters.Valid() {
 		return QueryValidationError(filters.Errors)
 	}
 
-	transactions, err := storage.ListUserTransactions(context.Background(), user.ID)
+	transactions, err := storage.ListUserTransactions(context.Background(), user.ID, filters)
 	if err != nil {
 		return err
 	}
 
-	return writeJSON(w, http.StatusOK, transactions)
+	return writeJSON(w, http.StatusOK, map[string]any{
+		"metadata":     filters.Metadata(),
+		"transactions": transactions,
+	})
 }
 
 func deleteTransaction(w http.ResponseWriter, r *http.Request) error {
