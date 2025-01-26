@@ -3,6 +3,7 @@ package storage
 import (
 	"context"
 
+	"github.com/felipedavid/saldop/filters"
 	"github.com/felipedavid/saldop/models"
 )
 
@@ -50,9 +51,10 @@ func InsertAccount(ctx context.Context, account *models.Account) error {
 	return nil
 }
 
-func ListUserAccounts(ctx context.Context, userID int) ([]models.Account, error) {
+func ListUserAccounts(ctx context.Context, userID int, f *filters.Filters) ([]models.Account, error) {
 	query := `
 		SELECT
+            count(*) OVER(),
 			id,
 			type,
 			name,
@@ -71,17 +73,20 @@ func ListUserAccounts(ctx context.Context, userID int) ([]models.Account, error)
 			updated_at
 		FROM account
 		WHERE user_id = $1 AND deleted_at IS NULL
+        LIMIT $2 OFFSET $3
 	`
 
-	rows, err := conn.Query(ctx, query, userID)
+	rows, err := conn.Query(ctx, query, userID, f.Limit(), f.Offset())
 	if err != nil {
 		return nil, err
 	}
 
-	var accounts []models.Account
+	totalRecords := 0
+	accounts := make([]models.Account, 0, f.PageSize)
 	for rows.Next() {
 		var account models.Account
 		err := rows.Scan(
+			&totalRecords,
 			&account.ID,
 			&account.Type,
 			&account.Name,
@@ -105,6 +110,8 @@ func ListUserAccounts(ctx context.Context, userID int) ([]models.Account, error)
 
 		accounts = append(accounts, account)
 	}
+
+	f.SetTotalRecords(totalRecords)
 
 	return accounts, nil
 }

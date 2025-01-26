@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"strconv"
 
+	"github.com/felipedavid/saldop/filters"
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/service"
 	"github.com/felipedavid/saldop/storage"
@@ -56,10 +57,23 @@ func deleteAccount(w http.ResponseWriter, r *http.Request) error {
 }
 
 func listUserAccounts(w http.ResponseWriter, r *http.Request) error {
-	accounts, err := storage.ListUserAccounts(context.Background(), 1)
+	user := helpers.GetUserFromRequestContext(r)
+	if user == nil {
+		return UnauthenticatedError(r.Context())
+	}
+
+	filters := filters.NewQueryFilters(r)
+	if !filters.Valid() {
+		return QueryValidationError(filters.Errors)
+	}
+
+	accounts, err := storage.ListUserAccounts(context.Background(), user.ID, filters)
 	if err != nil {
 		return err
 	}
 
-	return writeJSON(w, http.StatusOK, accounts)
+	return writeJSON(w, http.StatusOK, map[string]any{
+		"metadata": filters.Metadata(),
+		"accounts": accounts,
+	})
 }
