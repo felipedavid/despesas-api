@@ -109,6 +109,10 @@ func ListUserTransactions(ctx context.Context, userID int, f *filters.Filters) (
 	return transactions, nil
 }
 
+func UpdateTransaction(ctx context.Context, t *models.Transaction) error {
+	return nil
+}
+
 func DeleteTransaction(ctx context.Context, userID, transactionID int) error {
 	query := `
 		UPDATE transaction

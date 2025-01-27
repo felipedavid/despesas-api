@@ -116,6 +116,10 @@ func ListUserAccounts(ctx context.Context, userID int, f *filters.Filters) ([]mo
 	return accounts, nil
 }
 
+func UpdateAccount(ctx context.Context, a *models.Account) error {
+	return nil
+}
+
 func DeleteAccount(ctx context.Context, userID, accountID int) error {
 	query := `
 		UPDATE account

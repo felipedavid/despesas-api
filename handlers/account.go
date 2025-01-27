@@ -77,3 +77,7 @@ func listUserAccounts(w http.ResponseWriter, r *http.Request) error {
 		"accounts": accounts,
 	})
 }
+
+func editAccount(w http.ResponseWriter, r *http.Request) error {
+	return nil
+}

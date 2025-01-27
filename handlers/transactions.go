@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"fmt"
 	"net/http"
 	"strconv"
 
@@ -64,10 +65,20 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) error {
 		return BadRequestError(r.Context(), err.Error())
 	}
 
-	err = storage.DeleteTransaction(context.Background(), 1, transactionID)
+	user := helpers.GetUserFromRequestContext(r)
+	if user == nil {
+		return UnauthenticatedError(r.Context())
+	}
+
+	err = storage.DeleteTransaction(context.Background(), user.ID, transactionID)
 	if err != nil {
 		return err
 	}
 
 	return writeJSON(w, http.StatusNoContent, nil)
+}
+
+func editTransaction(w http.ResponseWriter, r *http.Request) error {
+	fmt.Fprintf(w, "not implemented yet")
+	return nil
 }

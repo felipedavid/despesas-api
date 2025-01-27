@@ -146,11 +146,20 @@ CREATE TABLE account (
 CREATE TABLE category (
     id SERIAL PRIMARY KEY,
     name TEXT NOT NULL,
+    default_category BOOLEAN NOT NULL DEFAULT false,
     user_id INTEGER REFERENCES users (id),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMPTZ
 );
+
+INSERT INTO category (name)
+VALUES
+    ('wage'),
+    ('transportation'),
+    ('food'),
+    ('education'),
+    ('entertainment');
 
 CREATE TABLE transaction (
     id SERIAL PRIMARY KEY,
