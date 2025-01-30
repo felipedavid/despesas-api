@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
@@ -73,7 +74,17 @@ func RegisterUser(params *RegisterUserParams) (*AuthenticationResponse, error) {
 		return nil, err
 	}
 
-	return nil, nil
+	tk, err := CreateToken(newUser.ID, 24*time.Hour, models.TokenScopeAuthentication)
+	if err != nil {
+		return nil, err
+	}
+
+	res := &AuthenticationResponse{
+		User:  newUser,
+		Token: tk,
+	}
+
+	return res, nil
 }
 
 type UserAuthParams struct {

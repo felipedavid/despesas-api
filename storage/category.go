@@ -9,9 +9,9 @@ import (
 
 func InsertCategory(ctx context.Context, c *models.Category) error {
 	query := `
-        INSERT INTO (name, user_id)
+        INSERT INTO category (name, user_id)
         VALUES ($1, $2)
-        RETURNING id, created_at, updated_at;
+        RETURNING id, created_at, updated_at
     `
 
 	err := conn.QueryRow(
@@ -46,7 +46,7 @@ func ListUserCategories(ctx context.Context, userID int, f *filters.Filters) ([]
 			created_at,
 			updated_at,
 			deleted_at
-		FROM transaction
+		FROM category
 		WHERE (default_category IS true OR user_id = $1) AND deleted_at IS NULL
         LIMIT $2 OFFSET $3
 	`
