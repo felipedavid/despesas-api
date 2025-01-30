@@ -22,3 +22,24 @@ type Account struct {
 	UpdatedAt time.Time  `db:"updated_at" json:"updated_at"`
 	DeletedAt *time.Time `db:"deleted_at" json:"-"`
 }
+
+type AccountNullable struct {
+	ID                  *int    `db:"id"`
+	Type                *string `db:"type"`
+	Name                *string `db:"name"`
+	Balance             *int    `db:"balance"`
+	CurrencyCode        *string `db:"currency_code"`
+	UserID              *int    `db:"user_id"`
+	ExternalID          *string `db:"external_id"`
+	Subtype             *string `db:"subtype"`
+	Number              *string `db:"number"`
+	Owner               *string `db:"owner"`
+	TaxNumber           *string `db:"tax_number"`
+	BankAccountDataID   *int    `db:"bank_account_data_id"`
+	CreditAccountDataID *int    `db:"credit_account_data_id"`
+	FiConnectionID      *int    `db:"fi_connection_id"`
+
+	CreatedAt *time.Time `db:"created_at"`
+	UpdatedAt *time.Time `db:"updated_at"`
+	DeletedAt *time.Time `db:"deleted_at"`
+}

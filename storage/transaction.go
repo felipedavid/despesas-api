@@ -133,9 +133,26 @@ func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID int, f 
             c.user_id,
 			c.created_at,
 			c.updated_at,
-			c.deleted_at
+			c.deleted_at,
+			a.id,
+			a.type,
+			a.name,
+			a.balance,
+			a.currency_code,
+			a.user_id,
+			a.external_id,
+			a.subtype,
+			a.number,
+			a.owner,
+			a.tax_number,
+			a.bank_account_data_id,
+			a.credit_account_data_id,
+			a.fi_connection_id,
+			a.created_at,
+			a.updated_at
 		FROM transaction t
         LEFT JOIN category c ON c.id = t.category_id
+        LEFT JOIN account a ON a.id = t.account_id
 		WHERE t.user_id = $1 AND t.deleted_at IS NULL
         LIMIT $2 OFFSET $3
 	`
@@ -151,6 +168,7 @@ func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID int, f 
 	for rows.Next() {
 		var t models.Transaction
 		var c models.CategoryNullable
+		var a models.AccountNullable
 
 		err := rows.Scan(
 			&totalRecords,
@@ -175,6 +193,22 @@ func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID int, f 
 			&c.CreatedAt,
 			&c.UpdatedAt,
 			&c.DeletedAt,
+			&a.ID,
+			&a.Type,
+			&a.Name,
+			&a.Balance,
+			&a.CurrencyCode,
+			&a.UserID,
+			&a.ExternalID,
+			&a.Subtype,
+			&a.Number,
+			&a.Owner,
+			&a.TaxNumber,
+			&a.BankAccountDataID,
+			&a.CreditAccountDataID,
+			&a.FiConnectionID,
+			&a.CreatedAt,
+			&a.UpdatedAt,
 		)
 		if err != nil {
 			return nil, err
@@ -189,6 +223,28 @@ func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID int, f 
 				CreatedAt:       *c.CreatedAt,
 				UpdatedAt:       *c.UpdatedAt,
 				DeletedAt:       c.DeletedAt,
+			}
+		}
+
+		if a.ID != nil {
+			t.Account = &models.Account{
+				ID:                  *a.ID,
+				Type:                *a.Type,
+				Name:                *a.Name,
+				Balance:             *a.Balance,
+				CurrencyCode:        *a.CurrencyCode,
+				UserID:              *a.UserID,
+				ExternalID:          a.ExternalID,
+				Subtype:             a.Subtype,
+				Number:              a.Number,
+				Owner:               a.Owner,
+				TaxNumber:           a.TaxNumber,
+				BankAccountDataID:   a.BankAccountDataID,
+				CreditAccountDataID: a.CreditAccountDataID,
+				FiConnectionID:      a.FiConnectionID,
+				CreatedAt:           *a.CreatedAt,
+				UpdatedAt:           *a.UpdatedAt,
+				DeletedAt:           a.DeletedAt,
 			}
 		}
 
