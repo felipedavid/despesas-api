@@ -109,6 +109,97 @@ func ListUserTransactions(ctx context.Context, userID int, f *filters.Filters) (
 	return transactions, nil
 }
 
+func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID int, f *filters.Filters) ([]models.Transaction, error) {
+	query := `
+		SELECT
+            count(*) OVER(),
+			t.id,
+			t.external_id,
+			t.user_id,
+			t.account_id,
+			t.description,
+			t.amount,
+			t.currency_code,
+			t.transaction_date,
+			t.category_id,
+			t.status,
+			t.type,
+			t.operation_type,
+			t.created_at,
+			t.updated_at,
+			c.id,
+            c.name,
+            c.default_category,
+            c.user_id,
+			c.created_at,
+			c.updated_at,
+			c.deleted_at
+		FROM transaction t
+        LEFT JOIN category c ON c.id = t.category_id
+		WHERE t.user_id = $1 AND t.deleted_at IS NULL
+        LIMIT $2 OFFSET $3
+	`
+
+	rows, err := conn.Query(ctx, query, userID, f.Limit(), f.Offset())
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	totalRecords := 0
+	transactions := make([]models.Transaction, 0, f.PageSize)
+	for rows.Next() {
+		var t models.Transaction
+		var c models.CategoryNullable
+
+		err := rows.Scan(
+			&totalRecords,
+			&t.ID,
+			&t.ExternalID,
+			&t.UserID,
+			&t.AccountID,
+			&t.Description,
+			&t.Amount,
+			&t.CurrencyCode,
+			&t.TransactionDate,
+			&t.CategoryID,
+			&t.Status,
+			&t.Type,
+			&t.OperationType,
+			&t.CreatedAt,
+			&t.UpdatedAt,
+			&c.ID,
+			&c.Name,
+			&c.DefaultCategory,
+			&c.UserID,
+			&c.CreatedAt,
+			&c.UpdatedAt,
+			&c.DeletedAt,
+		)
+		if err != nil {
+			return nil, err
+		}
+
+		if c.ID != nil {
+			t.Category = &models.Category{
+				ID:              *c.ID,
+				Name:            *c.Name,
+				DefaultCategory: *c.DefaultCategory,
+				UserID:          c.UserID,
+				CreatedAt:       *c.CreatedAt,
+				UpdatedAt:       *c.UpdatedAt,
+				DeletedAt:       c.DeletedAt,
+			}
+		}
+
+		transactions = append(transactions, t)
+	}
+
+	f.SetTotalRecords(totalRecords)
+
+	return transactions, nil
+}
+
 func UpdateTransaction(ctx context.Context, t *models.Transaction) error {
 	return nil
 }

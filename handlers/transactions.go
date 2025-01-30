@@ -48,7 +48,7 @@ func listUserTransactions(w http.ResponseWriter, r *http.Request) error {
 		return QueryValidationError(filters.Errors)
 	}
 
-	transactions, err := storage.ListUserTransactions(context.Background(), user.ID, filters)
+	transactions, err := storage.ListUserTransactionsWithPopulatedFields(context.Background(), user.ID, filters)
 	if err != nil {
 		return err
 	}
