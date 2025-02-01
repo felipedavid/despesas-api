@@ -7,6 +7,55 @@ import (
 	"github.com/felipedavid/saldop/models"
 )
 
+func GetUserTransaction(ctx context.Context, userID, transactionID int) (*models.Transaction, error) {
+	query := `
+        SELECT
+			id,
+			external_id,
+			user_id,
+			account_id,
+			description,
+			amount,
+			currency_code,
+			transaction_date,
+			category_id,
+			status,
+			type,
+			operation_type,
+			created_at,
+			updated_at
+		FROM transaction
+		WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
+    `
+
+	var t models.Transaction
+	err := conn.QueryRow(
+		ctx, query,
+		transactionID,
+		userID,
+	).Scan(
+		&t.ID,
+		&t.ExternalID,
+		&t.UserID,
+		&t.AccountID,
+		&t.Description,
+		&t.Amount,
+		&t.CurrencyCode,
+		&t.TransactionDate,
+		&t.CategoryID,
+		&t.Status,
+		&t.Type,
+		&t.OperationType,
+		&t.CreatedAt,
+		&t.UpdatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &t, nil
+}
+
 func InsertTransaction(ctx context.Context, t *models.Transaction) error {
 	query := `
 		INSERT INTO transaction (
@@ -257,6 +306,32 @@ func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID int, f 
 }
 
 func UpdateTransaction(ctx context.Context, t *models.Transaction) error {
+	query := `
+		UPDATE transaction
+		SET
+            description      = $1,
+            account_id       = $2,
+            category_id      = $3,
+            amount           = $4,
+            currency_code    = $5,
+            transaction_date = $6
+		WHERE user_id = $7 AND id = $8
+	`
+
+	_, err := conn.Exec(
+		ctx, query,
+		t.Description,
+		t.AccountID,
+		t.CategoryID,
+		t.Amount,
+		t.CurrencyCode,
+		t.TransactionDate,
+		t.UserID,
+		t.ID)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 
