@@ -158,6 +158,136 @@ func ListUserTransactions(ctx context.Context, userID int, f *filters.Filters) (
 	return transactions, nil
 }
 
+func GetUserTransactionWithPopulatedFields(ctx context.Context, userID, transactionID int) (*models.Transaction, error) {
+	var t models.Transaction
+	var c models.CategoryNullable
+	var a models.AccountNullable
+
+	query := `
+		SELECT
+			t.id,
+			t.external_id,
+			t.user_id,
+			t.account_id,
+			t.description,
+			t.amount,
+			t.currency_code,
+			t.transaction_date,
+			t.category_id,
+			t.status,
+			t.type,
+			t.operation_type,
+			t.created_at,
+			t.updated_at,
+			c.id,
+            c.name,
+            c.default_category,
+            c.user_id,
+			c.created_at,
+			c.updated_at,
+			c.deleted_at,
+			a.id,
+			a.type,
+			a.name,
+			a.balance,
+			a.currency_code,
+			a.user_id,
+			a.external_id,
+			a.subtype,
+			a.number,
+			a.owner,
+			a.tax_number,
+			a.bank_account_data_id,
+			a.credit_account_data_id,
+			a.fi_connection_id,
+			a.created_at,
+			a.updated_at
+		FROM transaction t
+        LEFT JOIN category c ON c.id = t.category_id
+        LEFT JOIN account a ON a.id = t.account_id
+		WHERE t.id = $1 AND t.user_id = $2 AND t.deleted_at IS NULL
+	`
+
+	err := conn.QueryRow(ctx, query, transactionID, userID).Scan(
+		&t.ID,
+		&t.ExternalID,
+		&t.UserID,
+		&t.AccountID,
+		&t.Description,
+		&t.Amount,
+		&t.CurrencyCode,
+		&t.TransactionDate,
+		&t.CategoryID,
+		&t.Status,
+		&t.Type,
+		&t.OperationType,
+		&t.CreatedAt,
+		&t.UpdatedAt,
+		&c.ID,
+		&c.Name,
+		&c.DefaultCategory,
+		&c.UserID,
+		&c.CreatedAt,
+		&c.UpdatedAt,
+		&c.DeletedAt,
+		&a.ID,
+		&a.Type,
+		&a.Name,
+		&a.Balance,
+		&a.CurrencyCode,
+		&a.UserID,
+		&a.ExternalID,
+		&a.Subtype,
+		&a.Number,
+		&a.Owner,
+		&a.TaxNumber,
+		&a.BankAccountDataID,
+		&a.CreditAccountDataID,
+		&a.FiConnectionID,
+		&a.CreatedAt,
+		&a.UpdatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	if c.ID != nil {
+		t.Category = &models.Category{
+			ID:              *c.ID,
+			Name:            *c.Name,
+			DefaultCategory: *c.DefaultCategory,
+			UserID:          c.UserID,
+			CreatedAt:       *c.CreatedAt,
+			UpdatedAt:       *c.UpdatedAt,
+			DeletedAt:       c.DeletedAt,
+		}
+	}
+
+	if a.ID != nil {
+		t.Account = &models.Account{
+			ID:                  *a.ID,
+			Type:                *a.Type,
+			Name:                *a.Name,
+			Balance:             *a.Balance,
+			CurrencyCode:        *a.CurrencyCode,
+			UserID:              *a.UserID,
+			ExternalID:          a.ExternalID,
+			Subtype:             a.Subtype,
+			Number:              a.Number,
+			Owner:               a.Owner,
+			TaxNumber:           a.TaxNumber,
+			BankAccountDataID:   a.BankAccountDataID,
+			CreditAccountDataID: a.CreditAccountDataID,
+			FiConnectionID:      a.FiConnectionID,
+			CreatedAt:           *a.CreatedAt,
+			UpdatedAt:           *a.UpdatedAt,
+			DeletedAt:           a.DeletedAt,
+		}
+	}
+
+	return &t, nil
+}
+
 func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID int, f *filters.Filters) ([]models.Transaction, error) {
 	query := `
 		SELECT

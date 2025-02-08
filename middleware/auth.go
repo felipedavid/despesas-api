@@ -40,3 +40,17 @@ func Auth(next http.Handler) http.Handler {
 
 	return http.HandlerFunc(f)
 }
+
+func RequireAuthentication(next http.Handler) http.Handler {
+	f := func(w http.ResponseWriter, r *http.Request) {
+		user := helpers.GetUserFromRequestContext(r)
+		if user == nil {
+			http.Error(w, "Require authentication", http.StatusUnauthorized)
+			return
+		}
+
+		next.ServeHTTP(w, r)
+	}
+
+	return http.HandlerFunc(f)
+}

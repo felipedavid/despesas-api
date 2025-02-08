@@ -20,9 +20,6 @@ func createAccount(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 
 	params.UserID = &user.ID
 
@@ -44,9 +41,6 @@ func deleteAccount(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 
 	err = storage.DeleteAccount(context.Background(), user.ID, accountID)
 	if err != nil {
@@ -57,11 +51,24 @@ func deleteAccount(w http.ResponseWriter, r *http.Request) error {
 	return nil
 }
 
+func getUserAccount(w http.ResponseWriter, r *http.Request) error {
+	user := helpers.GetUserFromRequestContext(r)
+
+	accountID, err := strconv.Atoi(r.PathValue("accountID"))
+	if err != nil {
+		return BadRequestError(r.Context(), err.Error())
+	}
+
+	account, err := storage.GetUserAccount(context.Background(), user.ID, accountID)
+	if err != nil {
+		return err
+	}
+
+	return writeJSON(w, http.StatusOK, account)
+}
+
 func listUserAccounts(w http.ResponseWriter, r *http.Request) error {
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 
 	filters := filters.NewQueryFilters(r)
 	if !filters.Valid() {
@@ -80,5 +87,33 @@ func listUserAccounts(w http.ResponseWriter, r *http.Request) error {
 }
 
 func editAccount(w http.ResponseWriter, r *http.Request) error {
-	return nil
+	accountID, err := strconv.Atoi(r.PathValue("accountID"))
+	if err != nil {
+		return BadRequestError(r.Context(), err.Error())
+	}
+
+	params := service.NewEditAccountParams(r.Context())
+	err = readJSON(r, &params)
+	if err != nil {
+		return BadRequestError(r.Context(), err.Error())
+	}
+
+	user := helpers.GetUserFromRequestContext(r)
+
+	account, err := storage.GetUserAccount(context.Background(), user.ID, accountID)
+	if err != nil {
+		return err
+	}
+
+	service.PatchValue(&account.Name, params.Name)
+	service.PatchValue(&account.Type, params.Type)
+	service.PatchValue(&account.Balance, params.Balance)
+	service.PatchValue(&account.CurrencyCode, params.CurrencyCode)
+
+	err = storage.UpdateAccount(context.Background(), account)
+	if err != nil {
+		return err
+	}
+
+	return writeJSON(w, http.StatusOK, account)
 }

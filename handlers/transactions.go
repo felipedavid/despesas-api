@@ -20,9 +20,6 @@ func createTransaction(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 	params.UserID = &user.ID
 
 	newTransaction, err := service.CreateTransaction(params)
@@ -36,11 +33,24 @@ func createTransaction(w http.ResponseWriter, r *http.Request) error {
 	return writeJSON(w, http.StatusCreated, newTransaction)
 }
 
+func getUserTransaction(w http.ResponseWriter, r *http.Request) error {
+	user := helpers.GetUserFromRequestContext(r)
+
+	transactionID, err := strconv.Atoi(r.PathValue("transactionID"))
+	if err != nil {
+		return BadRequestError(r.Context(), err.Error())
+	}
+
+	transaction, err := storage.GetUserTransactionWithPopulatedFields(context.Background(), user.ID, transactionID)
+	if err != nil {
+		return err
+	}
+
+	return writeJSON(w, http.StatusOK, transaction)
+}
+
 func listUserTransactions(w http.ResponseWriter, r *http.Request) error {
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 
 	filters := filters.NewQueryFilters(r)
 	if !filters.Valid() {
@@ -65,9 +75,6 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 
 	err = storage.DeleteTransaction(context.Background(), user.ID, transactionID)
 	if err != nil {
@@ -83,23 +90,25 @@ func editTransaction(w http.ResponseWriter, r *http.Request) error {
 		return BadRequestError(r.Context(), err.Error())
 	}
 
-	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
-
-	transaction, err := storage.GetUserTransaction(context.Background(), user.ID, transactionID)
-	if err != nil {
-		return err
-	}
-
 	params := service.NewEditTransactionParams(r.Context())
 	err = readJSON(r, &params)
 	if err != nil {
 		return BadRequestError(r.Context(), err.Error())
 	}
 
-	params.PatchModel(transaction)
+	user := helpers.GetUserFromRequestContext(r)
+
+	transaction, err := storage.GetUserTransaction(context.Background(), user.ID, transactionID)
+	if err != nil {
+		return err
+	}
+
+	service.PatchValue(&transaction.Description, params.Description)
+	service.PatchValue(&transaction.AccountID, params.AccountID)
+	service.PatchValue(&transaction.CategoryID, params.CategoryID)
+	service.PatchValue(&transaction.Amount, params.Amount)
+	service.PatchValue(&transaction.CurrencyCode, params.CurrencyCode)
+	service.PatchValue(&transaction.TransactionDate, params.TransactionDate)
 
 	err = storage.UpdateTransaction(context.Background(), transaction)
 	if err != nil {

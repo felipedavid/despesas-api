@@ -27,20 +27,11 @@ func NewCredentialsAuthenticationParams(ctx context.Context) *CredentialsAuthent
 func (p *CredentialsAuthenticationParams) Valid() bool {
 	p.Check(p.Email != nil, "email", "must be provided")
 	p.Check(p.Password != nil, "password", "must be provided")
-
-	if p.Email != nil {
-		p.Check(len(*p.Email) != 0, "email", "cannot be empty")
-	}
-
-	if p.Password != nil {
-		p.Check(len(*p.Password) >= 8, "password", "should be at least 8 characters long")
-	}
+	p.Check(p.Email != nil && len(*p.Email) != 0, "email", "cannot be empty")
+	p.Check(p.Password != nil && len(*p.Password) >= 8, "password", "should be at least 8 characters long")
 
 	return len(p.Errors) == 0
 }
-
-var ErrFailedValidation = errors.New(`failed validation`)
-var ErrInvalidCredentials = errors.New(`invalid credentials`)
 
 type AuthenticationResponse struct {
 	User  *models.User  `json:"user"`

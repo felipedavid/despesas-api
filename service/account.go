@@ -5,6 +5,7 @@ import (
 
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
+	"github.com/felipedavid/saldop/nullable"
 	"github.com/felipedavid/saldop/storage"
 	"github.com/felipedavid/saldop/validator"
 )
@@ -32,7 +33,7 @@ func (p *CreateAccountParams) Validate() bool {
 	p.Check(p.CurrencyCode != nil, "currency_code", "must be provided")
 
 	if p.Type != nil {
-		p.Check(models.ValidAccountType(*p.Type), "type", "can only be BANK_ACCOUNT or CREDIT_CARD")
+		p.Check(models.ValidAccountType(*p.Type), "type", "can only be BANK or CREDIT")
 	}
 
 	return len(p.Errors) == 0
@@ -56,4 +57,19 @@ func CreateManualAccount(p *CreateAccountParams) (*models.Account, error) {
 	}
 
 	return newAccount, nil
+}
+
+type EditAccountParams struct {
+	Name         nullable.Nullable[string]             `json:"name"`
+	Type         nullable.Nullable[models.AccountType] `json:"type"`
+	Balance      nullable.Nullable[int]                `json:"balance"`
+	CurrencyCode nullable.Nullable[string]             `json:"currency_code"`
+
+	*validator.Validator
+}
+
+func NewEditAccountParams(ctx context.Context) *EditAccountParams {
+	return &EditAccountParams{
+		Validator: validator.New(helpers.GetTranslator(ctx)),
+	}
 }

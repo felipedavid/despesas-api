@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 	"time"
 
 	"github.com/felipedavid/saldop/helpers"
@@ -76,11 +77,16 @@ func NewEditTransactionParams(ctx context.Context) *EditTransactionParams {
 	}
 }
 
-func (p *EditTransactionParams) PatchModel(m *models.Transaction) {
-	m.Description, _ = p.Description.Get()
-	m.AccountID, _ = p.AccountID.Get()
-	m.CategoryID, _ = p.CategoryID.Get()
-	m.Amount, _ = p.Amount.Get()
-	m.CurrencyCode, _ = p.CurrencyCode.Get()
-	m.TransactionDate, _ = p.TransactionDate.Get()
+func PatchValue[T any](v *T, attr nullable.Nullable[T]) {
+	attrValue, err := attr.Get()
+	if err != nil {
+		switch {
+		case errors.Is(err, nullable.ErrValueIsNull):
+			var zero T
+			*v = zero
+		}
+		return
+	}
+
+	*v = attrValue
 }

@@ -22,14 +22,17 @@ func NewNullNullable[T any]() Nullable[T] {
 	return n
 }
 
+var ErrValueIsNull = errors.New("value is null")
+var ErrValueIsNotSpecified = errors.New("value is not specified")
+
 // Get retrieves the underlying value, if present, and returns an error if the value was not present
 func (t Nullable[T]) Get() (T, error) {
 	var empty T
 	if t.IsNull() {
-		return empty, errors.New("value is null")
+		return empty, ErrValueIsNull
 	}
 	if !t.IsSpecified() {
-		return empty, errors.New("value is not specified")
+		return empty, ErrValueIsNotSpecified
 	}
 	return t[true], nil
 }

@@ -74,7 +74,7 @@ func RegisterUser(params *RegisterUserParams) (*AuthenticationResponse, error) {
 		return nil, err
 	}
 
-	tk, err := CreateToken(newUser.ID, 24*time.Hour, models.TokenScopeAuthentication)
+	tk, err := CreateToken(newUser.ID, 24*time.Hour*30, models.TokenScopeAuthentication)
 	if err != nil {
 		return nil, err
 	}

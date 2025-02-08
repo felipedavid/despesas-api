@@ -51,6 +51,55 @@ func InsertAccount(ctx context.Context, account *models.Account) error {
 	return nil
 }
 
+func GetUserAccount(ctx context.Context, userID, accountID int) (*models.Account, error) {
+	query := `
+		SELECT
+			id,
+			type,
+			name,
+			balance,
+			currency_code,
+			user_id,
+			external_id,
+			subtype,
+			number,
+			owner,
+			tax_number,
+			bank_account_data_id,
+			credit_account_data_id,
+			fi_connection_id,
+			created_at,
+			updated_at
+		FROM account
+		WHERE id = $1 AND user_id = $2 AND deleted_at IS NULL
+	`
+
+	var a models.Account
+	err := conn.QueryRow(ctx, query, accountID, userID).Scan(
+		&a.ID,
+		&a.Type,
+		&a.Name,
+		&a.Balance,
+		&a.CurrencyCode,
+		&a.UserID,
+		&a.ExternalID,
+		&a.Subtype,
+		&a.Number,
+		&a.Owner,
+		&a.TaxNumber,
+		&a.BankAccountDataID,
+		&a.CreditAccountDataID,
+		&a.FiConnectionID,
+		&a.CreatedAt,
+		&a.UpdatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	return &a, nil
+}
+
 func ListUserAccounts(ctx context.Context, userID int, f *filters.Filters) ([]models.Account, error) {
 	query := `
 		SELECT
@@ -117,6 +166,47 @@ func ListUserAccounts(ctx context.Context, userID int, f *filters.Filters) ([]mo
 }
 
 func UpdateAccount(ctx context.Context, a *models.Account) error {
+	query := `
+		UPDATE account
+		SET
+            type = $1,
+            name = $2,
+            balance = $3,
+            currency_code = $4,
+            user_id = $5,
+            external_id = $6,
+            subtype = $7,
+            number = $8,
+            owner = $9,
+            tax_number = $10,
+            bank_account_data_id = $11,
+            credit_account_data_id = $12,
+            fi_connection_id = $13
+		WHERE user_id = $7 AND id = $8
+    `
+
+	_, err := conn.Exec(
+		ctx, query,
+		a.Type,
+		a.Name,
+		a.Balance,
+		a.CurrencyCode,
+		a.UserID,
+		a.ExternalID,
+		a.Subtype,
+		a.Number,
+		a.Owner,
+		a.TaxNumber,
+		a.BankAccountDataID,
+		a.CreditAccountDataID,
+		a.FiConnectionID,
+		a.UserID,
+		a.ID,
+	)
+	if err != nil {
+		return err
+	}
+
 	return nil
 }
 

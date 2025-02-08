@@ -24,9 +24,6 @@ func createCategory(w http.ResponseWriter, r *http.Request) error {
 	}
 
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 
 	newCategory := params.Model(&user.ID)
 	err = storage.InsertCategory(context.Background(), newCategory)
@@ -39,9 +36,6 @@ func createCategory(w http.ResponseWriter, r *http.Request) error {
 
 func listUserCategories(w http.ResponseWriter, r *http.Request) error {
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 
 	filters := filters.NewQueryFilters(r)
 	if !filters.Valid() {
@@ -65,11 +59,7 @@ func deleteCategory(w http.ResponseWriter, r *http.Request) error {
 		return BadRequestError(r.Context(), err.Error())
 	}
 
-	// Add a middleware to ensure the user is accessing this route with a valid user
 	user := helpers.GetUserFromRequestContext(r)
-	if user == nil {
-		return UnauthenticatedError(r.Context())
-	}
 
 	err = storage.DeleteCategory(context.Background(), user.ID, categoryID)
 	if err != nil {
