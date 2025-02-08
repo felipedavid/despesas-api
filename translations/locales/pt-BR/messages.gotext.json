@@ -22,6 +22,11 @@
             "translation": "precisa ser informado"
         },
         {
+            "id": "can only be BANK or CREDIT",
+            "message": "can only be BANK or CREDIT",
+            "translation": "pode ser apenas BANK ou CREDIT"
+        },
+        {
             "id": "cannot be empty",
             "message": "cannot be empty",
             "translation": "não pode estar vazio"

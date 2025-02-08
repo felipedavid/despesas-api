@@ -30,6 +30,13 @@
             "fuzzy": true
         },
         {
+            "id": "can only be BANK or CREDIT",
+            "message": "can only be BANK or CREDIT",
+            "translation": "can only be BANK or CREDIT",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "cannot be empty",
             "message": "cannot be empty",
             "translation": "cannot be empty",
