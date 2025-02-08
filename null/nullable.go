@@ -1,4 +1,4 @@
-package nullable
+package null
 
 import (
 	"bytes"

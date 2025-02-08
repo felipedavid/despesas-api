@@ -7,7 +7,7 @@ import (
 
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
-	"github.com/felipedavid/saldop/nullable"
+	"github.com/felipedavid/saldop/null"
 	"github.com/felipedavid/saldop/storage"
 	"github.com/felipedavid/saldop/validator"
 )
@@ -61,12 +61,12 @@ func CreateTransaction(p *CreateTransactionParams) (*models.Transaction, error) 
 }
 
 type EditTransactionParams struct {
-	Description     nullable.Nullable[*string]   `json:"description"`
-	AccountID       nullable.Nullable[*int]      `json:"account_id"`
-	CategoryID      nullable.Nullable[*int]      `json:"category_id"`
-	Amount          nullable.Nullable[int]       `json:"amount"`
-	CurrencyCode    nullable.Nullable[string]    `json:"currency_code"`
-	TransactionDate nullable.Nullable[time.Time] `json:"transaction_date"`
+	Description     null.Nullable[*string]   `json:"description"`
+	AccountID       null.Nullable[*int]      `json:"account_id"`
+	CategoryID      null.Nullable[*int]      `json:"category_id"`
+	Amount          null.Nullable[int]       `json:"amount"`
+	CurrencyCode    null.Nullable[string]    `json:"currency_code"`
+	TransactionDate null.Nullable[time.Time] `json:"transaction_date"`
 
 	*validator.Validator
 }
@@ -77,11 +77,11 @@ func NewEditTransactionParams(ctx context.Context) *EditTransactionParams {
 	}
 }
 
-func PatchValue[T any](v *T, attr nullable.Nullable[T]) {
+func PatchValue[T any](v *T, attr null.Nullable[T]) {
 	attrValue, err := attr.Get()
 	if err != nil {
 		switch {
-		case errors.Is(err, nullable.ErrValueIsNull):
+		case errors.Is(err, null.ErrValueIsNull):
 			var zero T
 			*v = zero
 		}

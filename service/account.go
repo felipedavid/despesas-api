@@ -5,7 +5,7 @@ import (
 
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
-	"github.com/felipedavid/saldop/nullable"
+	"github.com/felipedavid/saldop/null"
 	"github.com/felipedavid/saldop/storage"
 	"github.com/felipedavid/saldop/validator"
 )
@@ -60,10 +60,10 @@ func CreateManualAccount(p *CreateAccountParams) (*models.Account, error) {
 }
 
 type EditAccountParams struct {
-	Name         nullable.Nullable[string]             `json:"name"`
-	Type         nullable.Nullable[models.AccountType] `json:"type"`
-	Balance      nullable.Nullable[int]                `json:"balance"`
-	CurrencyCode nullable.Nullable[string]             `json:"currency_code"`
+	Name         null.Nullable[string]             `json:"name"`
+	Type         null.Nullable[models.AccountType] `json:"type"`
+	Balance      null.Nullable[int]                `json:"balance"`
+	CurrencyCode null.Nullable[string]             `json:"currency_code"`
 
 	*validator.Validator
 }
