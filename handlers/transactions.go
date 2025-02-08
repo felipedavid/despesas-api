@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -18,18 +19,17 @@ func createTransaction(w http.ResponseWriter, r *http.Request) error {
 		return BadRequestError(r.Context(), err.Error())
 	}
 
-	if !params.Valid() {
-		return ValidationError(params.Errors)
-	}
-
 	user := helpers.GetUserFromRequestContext(r)
 	if user == nil {
 		return UnauthenticatedError(r.Context())
 	}
+	params.UserID = &user.ID
 
-	newTransaction := params.Model(user.ID)
-	err = storage.InsertTransaction(context.Background(), newTransaction)
+	newTransaction, err := service.CreateTransaction(params)
 	if err != nil {
+		if errors.Is(err, service.ErrFailedValidation) {
+			return ValidationError(params.Errors)
+		}
 		return err
 	}
 

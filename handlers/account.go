@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"context"
+	"errors"
 	"net/http"
 	"strconv"
 
@@ -12,14 +13,10 @@ import (
 )
 
 func createAccount(w http.ResponseWriter, r *http.Request) error {
-	createAccountParams := service.NewCreateAccountParams(r.Context())
-	err := readJSON(r, &createAccountParams)
+	params := service.NewCreateAccountParams(r.Context())
+	err := readJSON(r, &params)
 	if err != nil {
 		return BadRequestError(r.Context(), err.Error())
-	}
-
-	if !createAccountParams.Validate() {
-		return ValidationError(createAccountParams.Errors)
 	}
 
 	user := helpers.GetUserFromRequestContext(r)
@@ -27,13 +24,17 @@ func createAccount(w http.ResponseWriter, r *http.Request) error {
 		return UnauthenticatedError(r.Context())
 	}
 
-	newAccount := createAccountParams.Model(user.ID)
-	err = storage.InsertAccount(context.Background(), newAccount)
+	params.UserID = &user.ID
+
+	acc, err := service.CreateManualAccount(params)
 	if err != nil {
+		if errors.Is(err, service.ErrFailedValidation) {
+			return ValidationError(params.Errors)
+		}
 		return err
 	}
 
-	return writeJSON(w, http.StatusCreated, newAccount)
+	return writeJSON(w, http.StatusCreated, acc)
 }
 
 func deleteAccount(w http.ResponseWriter, r *http.Request) error {

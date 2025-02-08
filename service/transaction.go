@@ -7,6 +7,7 @@ import (
 	"github.com/felipedavid/saldop/helpers"
 	"github.com/felipedavid/saldop/models"
 	"github.com/felipedavid/saldop/nullable"
+	"github.com/felipedavid/saldop/storage"
 	"github.com/felipedavid/saldop/validator"
 )
 
@@ -17,6 +18,7 @@ type CreateTransactionParams struct {
 	Amount          *int       `json:"amount"`
 	CurrencyCode    *string    `json:"currency_code"`
 	TransactionDate *time.Time `json:"transaction_date"`
+	UserID          *int
 
 	*validator.Validator
 }
@@ -35,9 +37,13 @@ func (p *CreateTransactionParams) Valid() bool {
 	return len(p.Errors) == 0
 }
 
-func (p *CreateTransactionParams) Model(userID int) *models.Transaction {
-	return &models.Transaction{
-		UserID:          userID,
+func CreateTransaction(p *CreateTransactionParams) (*models.Transaction, error) {
+	if !p.Valid() {
+		return nil, ErrFailedValidation
+	}
+
+	newTransaction := &models.Transaction{
+		UserID:          *p.UserID,
 		AccountID:       p.AccountID,
 		CategoryID:      p.CategoryID,
 		Description:     p.Description,
@@ -45,6 +51,12 @@ func (p *CreateTransactionParams) Model(userID int) *models.Transaction {
 		CurrencyCode:    *p.CurrencyCode,
 		TransactionDate: *p.TransactionDate,
 	}
+	err := storage.InsertTransaction(context.Background(), newTransaction)
+	if err != nil {
+		return nil, err
+	}
+
+	return newTransaction, nil
 }
 
 type EditTransactionParams struct {
