@@ -182,7 +182,7 @@ func UpdateAccount(ctx context.Context, a *models.Account) error {
             bank_account_data_id = $11,
             credit_account_data_id = $12,
             fi_connection_id = $13
-		WHERE user_id = $7 AND id = $8
+		WHERE user_id = $14 AND id = $15
     `
 
 	_, err := conn.Exec(
