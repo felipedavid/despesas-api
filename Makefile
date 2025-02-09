@@ -13,4 +13,4 @@ nukedatabase:
 	docker volume rm saldop-api_database_data
 
 generate_translations:
-	go generate ./translations/translations.go
+	go generate ./internal/translations/translations.go

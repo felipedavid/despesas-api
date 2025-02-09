@@ -6,8 +6,8 @@ import (
 	"net/http"
 	"strconv"
 
-	"github.com/felipedavid/saldop/filters"
-	"github.com/felipedavid/saldop/helpers"
+	"github.com/felipedavid/saldop/internal/filters"
+	"github.com/felipedavid/saldop/internal/helpers"
 	"github.com/felipedavid/saldop/service"
 	"github.com/felipedavid/saldop/storage"
 )

@@ -10,7 +10,7 @@ import (
 	"github.com/felipedavid/saldop/storage"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	_ "github.com/felipedavid/saldop/translations"
+	_ "github.com/felipedavid/saldop/internal/translations"
 )
 
 // REMINDER: When going to push to production, remember to create a new google

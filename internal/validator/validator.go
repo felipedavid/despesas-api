@@ -1,7 +1,7 @@
 package validator
 
 import (
-	"github.com/felipedavid/saldop/translations"
+	"github.com/felipedavid/saldop/internal/translations"
 )
 
 type Validator struct {

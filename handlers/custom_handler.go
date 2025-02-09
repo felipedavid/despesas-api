@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
-	"github.com/felipedavid/saldop/helpers"
+	"github.com/felipedavid/saldop/internal/helpers"
 )
 
 type Error interface {

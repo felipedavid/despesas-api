@@ -3,7 +3,7 @@ package storage
 import (
 	"context"
 
-	"github.com/felipedavid/saldop/filters"
+	"github.com/felipedavid/saldop/internal/filters"
 	"github.com/felipedavid/saldop/models"
 )
 

@@ -4,8 +4,8 @@ import (
 	"context"
 	"net/http"
 
+	"github.com/felipedavid/saldop/internal/translations"
 	"github.com/felipedavid/saldop/models"
-	"github.com/felipedavid/saldop/translations"
 )
 
 type contextKey string

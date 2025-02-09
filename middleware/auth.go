@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/felipedavid/saldop/helpers"
+	"github.com/felipedavid/saldop/internal/helpers"
 	"github.com/felipedavid/saldop/models"
 	"github.com/felipedavid/saldop/storage"
 )

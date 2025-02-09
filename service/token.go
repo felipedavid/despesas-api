@@ -7,9 +7,9 @@ import (
 	"encoding/base32"
 	"time"
 
+	"github.com/felipedavid/saldop/internal/validator"
 	"github.com/felipedavid/saldop/models"
 	"github.com/felipedavid/saldop/storage"
-	"github.com/felipedavid/saldop/validator"
 )
 
 func ValidateTokenPlaintext(v *validator.Validator, tokenPlaintext string) {

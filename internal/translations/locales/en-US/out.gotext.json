@@ -2,6 +2,13 @@
     "language": "en-US",
     "messages": [
         {
+            "id": "must be an integer value",
+            "message": "must be an integer value",
+            "translation": "must be an integer value",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "should be greater than zero",
             "message": "should be greater than zero",
             "translation": "should be greater than zero",
@@ -12,13 +19,6 @@
             "id": "cannot be greater than 200",
             "message": "cannot be greater than 200",
             "translation": "cannot be greater than 200",
-            "translatorComment": "Copied from source.",
-            "fuzzy": true
-        },
-        {
-            "id": "must be an integer value",
-            "message": "must be an integer value",
-            "translation": "must be an integer value",
             "translatorComment": "Copied from source.",
             "fuzzy": true
         },

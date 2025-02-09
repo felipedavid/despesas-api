@@ -5,10 +5,10 @@ import (
 	"errors"
 	"time"
 
-	"github.com/felipedavid/saldop/helpers"
+	"github.com/felipedavid/saldop/internal/helpers"
+	"github.com/felipedavid/saldop/internal/validator"
 	"github.com/felipedavid/saldop/models"
 	"github.com/felipedavid/saldop/storage"
-	"github.com/felipedavid/saldop/validator"
 	"golang.org/x/crypto/bcrypt"
 )
 

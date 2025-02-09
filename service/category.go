@@ -3,9 +3,9 @@ package service
 import (
 	"context"
 
-	"github.com/felipedavid/saldop/helpers"
+	"github.com/felipedavid/saldop/internal/helpers"
+	"github.com/felipedavid/saldop/internal/validator"
 	"github.com/felipedavid/saldop/models"
-	"github.com/felipedavid/saldop/validator"
 )
 
 type CreateCategoryParams struct {

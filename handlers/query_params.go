@@ -4,7 +4,7 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/felipedavid/saldop/validator"
+	"github.com/felipedavid/saldop/internal/validator"
 )
 
 func getQueryInt(qs url.Values, key string, defaultValue int, v *validator.Validator) int {

@@ -6,8 +6,8 @@ import (
 	"net/url"
 	"strconv"
 
-	"github.com/felipedavid/saldop/helpers"
-	"github.com/felipedavid/saldop/validator"
+	"github.com/felipedavid/saldop/internal/helpers"
+	"github.com/felipedavid/saldop/internal/validator"
 )
 
 type Metadata struct {

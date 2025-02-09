@@ -5,8 +5,8 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/felipedavid/saldop/helpers"
-	"github.com/felipedavid/saldop/translations"
+	"github.com/felipedavid/saldop/internal/helpers"
+	"github.com/felipedavid/saldop/internal/translations"
 )
 
 func SpecifyLanguage(next http.Handler) http.Handler {
