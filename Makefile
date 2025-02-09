@@ -12,5 +12,11 @@ nukedatabase:
 	docker compose down database
 	docker volume rm saldop-api_database_data
 
+build:
+	go build -o ./bin/api ./cmd
+
+run: build
+	./bin/api
+
 generate_translations:
 	go generate ./internal/translations/translations.go
