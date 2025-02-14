@@ -20,10 +20,7 @@ type AppConfig struct {
 func newAppConfig() (*AppConfig, error) {
 	cfg := &AppConfig{}
 
-	err := godotenv.Load()
-	if err != nil {
-		return nil, err
-	}
+	_ = godotenv.Load()
 
 	cfg.Addr = os.Getenv("ADDR")
 	cfg.DbUser = os.Getenv("DB_USER")

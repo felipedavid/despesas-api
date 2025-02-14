@@ -13,6 +13,8 @@ import (
 	_ "github.com/felipedavid/saldop/internal/translations"
 )
 
+var Version = ""
+
 // REMINDER: When going to push to production, remember to create a new google
 // oauth thing not vinculated to my real name.
 
@@ -38,7 +40,7 @@ func runApp() error {
 
 	storage.Init(connPool)
 
-	slog.Info("Starting http server", "addr", cfg.Addr)
+	slog.Info("Starting http server", "addr", cfg.Addr, "version", Version)
 
 	s := http.Server{
 		Handler: handlers.SetupMultiplexer(),

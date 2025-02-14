@@ -20,3 +20,9 @@ run: build
 
 generate_translations:
 	go generate ./internal/translations/translations.go
+
+test:
+	docker build -q --target export-test -o ./out .
+
+image:
+	docker build -o out --build-arg VERSION=tururu .
