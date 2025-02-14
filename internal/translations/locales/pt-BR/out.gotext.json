@@ -7,6 +7,11 @@
             "translation": "precisa ser um inteiro"
         },
         {
+            "id": "email already exists",
+            "message": "email already exists",
+            "translation": "email já existe"
+        },
+        {
             "id": "should be greater than zero",
             "message": "should be greater than zero",
             "translation": "deve ser maior que zero"

@@ -39,39 +39,42 @@ func init() {
 }
 
 var messageKeyToIndex = map[string]int{
-	"can only be BANK or CREDIT":           4,
-	"cannot be empty":                      5,
-	"cannot be greater than 200":           2,
+	"can only be BANK or CREDIT":           5,
+	"cannot be empty":                      6,
+	"cannot be greater than 200":           3,
+	"email already exists":                 1,
 	"must be an integer value":             0,
-	"must be provided":                     3,
-	"should be 26 bytes long":              7,
-	"should be at least 3 characters long": 8,
-	"should be at least 8 characters long": 6,
-	"should be greater than zero":          1,
+	"must be provided":                     4,
+	"should be 26 bytes long":              8,
+	"should be at least 3 characters long": 9,
+	"should be at least 8 characters long": 7,
+	"should be greater than zero":          2,
 }
 
-var en_USIndex = []uint32{ // 10 elements
-	0x00000000, 0x00000019, 0x00000035, 0x00000050,
-	0x00000061, 0x0000007c, 0x0000008c, 0x000000b1,
-	0x000000c9, 0x000000ee,
-} // Size: 64 bytes
+var en_USIndex = []uint32{ // 11 elements
+	0x00000000, 0x00000019, 0x0000002e, 0x0000004a,
+	0x00000065, 0x00000076, 0x00000091, 0x000000a1,
+	0x000000c6, 0x000000de, 0x00000103,
+} // Size: 68 bytes
 
-const en_USData string = "" + // Size: 238 bytes
-	"\x02must be an integer value\x02should be greater than zero\x02cannot be" +
-	" greater than 200\x02must be provided\x02can only be BANK or CREDIT\x02c" +
-	"annot be empty\x02should be at least 8 characters long\x02should be 26 b" +
-	"ytes long\x02should be at least 3 characters long"
+const en_USData string = "" + // Size: 259 bytes
+	"\x02must be an integer value\x02email already exists\x02should be greate" +
+	"r than zero\x02cannot be greater than 200\x02must be provided\x02can onl" +
+	"y be BANK or CREDIT\x02cannot be empty\x02should be at least 8 character" +
+	"s long\x02should be 26 bytes long\x02should be at least 3 characters lon" +
+	"g"
 
-var pt_BRIndex = []uint32{ // 10 elements
-	0x00000000, 0x00000017, 0x0000002f, 0x0000004b,
-	0x00000061, 0x00000080, 0x00000096, 0x000000b6,
-	0x000000e0, 0x00000100,
-} // Size: 64 bytes
+var pt_BRIndex = []uint32{ // 11 elements
+	0x00000000, 0x00000017, 0x00000028, 0x00000040,
+	0x0000005c, 0x00000072, 0x00000091, 0x000000a7,
+	0x000000c7, 0x000000f1, 0x00000111,
+} // Size: 68 bytes
 
-const pt_BRData string = "" + // Size: 256 bytes
-	"\x02precisa ser um inteiro\x02deve ser maior que zero\x02não pode ser ma" +
-	"ior que 200\x02precisa ser informado\x02pode ser apenas BANK ou CREDIT" +
-	"\x02não pode estar vazio\x02deve ter pelomenos 8 caracteres\x02deveria t" +
-	"er pelomenos 26 bytes de tamanho\x02deve ter pelomenos 3 caracteres"
+const pt_BRData string = "" + // Size: 273 bytes
+	"\x02precisa ser um inteiro\x02email já existe\x02deve ser maior que zero" +
+	"\x02não pode ser maior que 200\x02precisa ser informado\x02pode ser apen" +
+	"as BANK ou CREDIT\x02não pode estar vazio\x02deve ter pelomenos 8 caract" +
+	"eres\x02deveria ter pelomenos 26 bytes de tamanho\x02deve ter pelomenos " +
+	"3 caracteres"
 
-	// Total table size 622 bytes (0KiB); checksum: BE2717FA
+	// Total table size 668 bytes (0KiB); checksum: E2DADF87

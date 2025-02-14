@@ -9,6 +9,13 @@
             "fuzzy": true
         },
         {
+            "id": "email already exists",
+            "message": "email already exists",
+            "translation": "email already exists",
+            "translatorComment": "Copied from source.",
+            "fuzzy": true
+        },
+        {
             "id": "should be greater than zero",
             "message": "should be greater than zero",
             "translation": "should be greater than zero",

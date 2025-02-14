@@ -1,9 +1,11 @@
 package handlers
 
 import (
+	"errors"
 	"net/http"
 
 	"github.com/felipedavid/saldop/service"
+	"github.com/felipedavid/saldop/storage"
 )
 
 func registerUser(w http.ResponseWriter, r *http.Request) error {
@@ -11,9 +13,15 @@ func registerUser(w http.ResponseWriter, r *http.Request) error {
 	if err := readJSON(r, params); err != nil {
 		return BadRequestError(r.Context(), err.Error())
 	}
+	t := params.Translator
 
 	res, err := service.RegisterUser(params)
 	if err != nil {
+		if errors.Is(err, storage.ErrDuplicatedEmail) {
+			return ValidationError(map[string]string{
+				"email": t.Translate("email already exists"),
+			})
+		}
 		return err
 	}
 
