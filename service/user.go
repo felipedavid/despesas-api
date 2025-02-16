@@ -28,6 +28,10 @@ func NewRegisterUserParams(ctx context.Context) *RegisterUserParams {
 }
 
 func (p *RegisterUserParams) Valid() bool {
+	if p.Validator == nil {
+		p.Validator = validator.New(nil)
+	}
+
 	p.Check(p.Name != nil, "name", "must be provided")
 	p.Check(p.Email != nil, "email", "must be provided")
 	p.Check(p.Password != nil, "password", "must be provided")
@@ -100,6 +104,10 @@ func NewUserAuthParams(ctx context.Context) *UserAuthParams {
 }
 
 func (p *UserAuthParams) Valid() bool {
+	if p.Validator == nil {
+		p.Validator = validator.New(nil)
+	}
+
 	p.Check(p.Email != nil, "email", "must be provided")
 	p.Check(p.Password != nil, "password", "must be provided")
 

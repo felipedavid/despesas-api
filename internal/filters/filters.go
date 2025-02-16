@@ -60,6 +60,10 @@ func NewQueryFilters(r *http.Request) *Filters {
 }
 
 func (f *Filters) Valid() bool {
+	if f.Validator == nil {
+		f.Validator = validator.New(nil)
+	}
+
 	f.Check(f.Page > 0, "page", "should be greater than zero")
 	f.Check(f.PageSize > 0, "page_size", "should be greater than zero")
 	f.Check(f.PageSize <= 200, "page_size", "cannot be greater than 200")
