@@ -1,6 +1,10 @@
 package service
 
-import "testing"
+import (
+	"testing"
+
+	"github.com/felipedavid/saldop/test"
+)
 
 func TestRegisterUserParams_Valid(t *testing.T) {
 	tests := []struct {
@@ -81,16 +85,11 @@ func TestRegisterUserParams_Valid(t *testing.T) {
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
 			valid := tt.params.Valid()
-			if valid != tt.expected {
-				t.Errorf("expected valid to be %v, got %v", tt.expected, valid)
-			}
-			if len(tt.params.Errors) != len(tt.errors) {
-				t.Errorf("expected %d errors, got %d", len(tt.errors), len(tt.params.Errors))
-			}
+
+			test.Equal(t, valid, tt.expected)
+			test.Equal(t, len(tt.params.Errors), len(tt.params.Errors))
 			for field, message := range tt.errors {
-				if tt.params.Errors[field] != message {
-					t.Errorf("expected error for %s to be '%s', got '%s'", field, message, tt.params.Errors[field])
-				}
+				test.Equal(t, tt.params.Errors[field], message)
 			}
 		})
 	}
