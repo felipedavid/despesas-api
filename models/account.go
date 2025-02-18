@@ -39,12 +39,12 @@ func ValidAccountSubtype(ast string) bool {
 }
 
 type Account struct {
-	ID                  int             `db:"id" json:"id"`
+	ID                  string          `db:"id" json:"id"`
 	Type                AccountType     `db:"type" json:"type"`
 	Name                string          `db:"name" json:"name"`
 	Balance             int             `db:"balance" json:"balance"`
 	CurrencyCode        string          `db:"currency_code" json:"currency_code"`
-	UserID              int             `db:"user_id" json:"user_id"`
+	UserID              string          `db:"user_id" json:"user_id"`
 	ExternalID          *string         `db:"external_id" json:"-"`
 	Subtype             *AccountSubtype `db:"subtype" json:"subtype"`
 	Number              *string         `db:"number" json:"-"`
@@ -60,12 +60,12 @@ type Account struct {
 }
 
 type AccountNullable struct {
-	ID                  *int            `db:"id"`
+	ID                  *string         `db:"id"`
 	Type                *AccountType    `db:"type"`
 	Name                *string         `db:"name"`
 	Balance             *int            `db:"balance"`
 	CurrencyCode        *string         `db:"currency_code"`
-	UserID              *int            `db:"user_id"`
+	UserID              *string         `db:"user_id"`
 	ExternalID          *string         `db:"external_id"`
 	Subtype             *AccountSubtype `db:"subtype"`
 	Number              *string         `db:"number"`

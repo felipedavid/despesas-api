@@ -51,7 +51,7 @@ func InsertAccount(ctx context.Context, account *models.Account) error {
 	return nil
 }
 
-func GetUserAccount(ctx context.Context, userID, accountID int) (*models.Account, error) {
+func GetUserAccount(ctx context.Context, userID, accountID string) (*models.Account, error) {
 	query := `
 		SELECT
 			id,
@@ -100,7 +100,7 @@ func GetUserAccount(ctx context.Context, userID, accountID int) (*models.Account
 	return &a, nil
 }
 
-func ListUserAccounts(ctx context.Context, userID int, f *filters.Filters) ([]models.Account, error) {
+func ListUserAccounts(ctx context.Context, userID string, f *filters.Filters) ([]models.Account, error) {
 	query := `
 		SELECT
             count(*) OVER(),
@@ -210,7 +210,7 @@ func UpdateAccount(ctx context.Context, a *models.Account) error {
 	return nil
 }
 
-func DeleteAccount(ctx context.Context, userID, accountID int) error {
+func DeleteAccount(ctx context.Context, userID, accountID string) error {
 	query := `
 		UPDATE account
 		SET deleted_at = NOW()

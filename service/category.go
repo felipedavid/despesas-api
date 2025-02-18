@@ -5,7 +5,6 @@ import (
 
 	"github.com/felipedavid/saldop/internal/helpers"
 	"github.com/felipedavid/saldop/internal/validator"
-	"github.com/felipedavid/saldop/models"
 )
 
 type CreateCategoryParams struct {
@@ -24,11 +23,4 @@ func (p *CreateCategoryParams) Validate() bool {
 	p.Check(p.Name != nil, "name", "must be provided")
 
 	return len(p.Errors) == 0
-}
-
-func (p *CreateCategoryParams) Model(userID *int) *models.Category {
-	return &models.Category{
-		Name:   *p.Name,
-		UserID: userID,
-	}
 }

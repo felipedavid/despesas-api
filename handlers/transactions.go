@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"strconv"
 
 	"github.com/felipedavid/saldop/internal/filters"
 	"github.com/felipedavid/saldop/internal/helpers"
@@ -36,10 +35,7 @@ func createTransaction(w http.ResponseWriter, r *http.Request) error {
 func getUserTransaction(w http.ResponseWriter, r *http.Request) error {
 	user := helpers.GetUserFromRequestContext(r)
 
-	transactionID, err := strconv.Atoi(r.PathValue("transactionID"))
-	if err != nil {
-		return BadRequestError(r.Context(), err.Error())
-	}
+	transactionID := r.PathValue("transactionID")
 
 	transaction, err := storage.GetUserTransactionWithPopulatedFields(context.Background(), user.ID, transactionID)
 	if err != nil {
@@ -69,14 +65,11 @@ func listUserTransactions(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteTransaction(w http.ResponseWriter, r *http.Request) error {
-	transactionID, err := strconv.Atoi(r.PathValue("transactionID"))
-	if err != nil {
-		return BadRequestError(r.Context(), err.Error())
-	}
+	transactionID := r.PathValue("transactionID")
 
 	user := helpers.GetUserFromRequestContext(r)
 
-	err = storage.DeleteTransaction(context.Background(), user.ID, transactionID)
+	err := storage.DeleteTransaction(context.Background(), user.ID, transactionID)
 	if err != nil {
 		return err
 	}
@@ -85,13 +78,10 @@ func deleteTransaction(w http.ResponseWriter, r *http.Request) error {
 }
 
 func editTransaction(w http.ResponseWriter, r *http.Request) error {
-	transactionID, err := strconv.Atoi(r.PathValue("transactionID"))
-	if err != nil {
-		return BadRequestError(r.Context(), err.Error())
-	}
+	transactionID := r.PathValue("transactionID")
 
 	params := service.NewEditTransactionParams(r.Context())
-	err = readJSON(r, &params)
+	err := readJSON(r, &params)
 	if err != nil {
 		return BadRequestError(r.Context(), err.Error())
 	}

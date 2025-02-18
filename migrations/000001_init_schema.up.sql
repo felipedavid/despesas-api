@@ -1,6 +1,6 @@
 
 CREATE TABLE users (
-    id SERIAL PRIMARY KEY,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
     name TEXT NOT NULL,
     email TEXT UNIQUE NOT NULL,
     password BYTEA NOT NULL,
@@ -17,14 +17,14 @@ CREATE TABLE users (
 
 CREATE TABLE token (
     hash BYTEA PRIMARY KEY,
-    user_id INTEGER REFERENCES users (id) NOT NULL,
+    user_id UUID REFERENCES users (id) NOT NULL,
     expiry TIMESTAMPTZ NOT NULL,
     scope TEXT NOT NULL
 );
 
 CREATE TABLE address (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users (id) NOT NULL,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
+    user_id UUID REFERENCES users (id) NOT NULL,
     full_address TEXT NOT NULL,
     state TEXT NOT NULL,
     primary_address TEXT NOT NULL,
@@ -36,23 +36,23 @@ CREATE TABLE address (
 );
 
 CREATE TABLE phone_number (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users (id) NOT NULL,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
+    user_id UUID REFERENCES users (id) NOT NULL,
     value TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE email (
-    id SERIAL PRIMARY KEY,
-    user_id INTEGER REFERENCES users (id) NOT NULL,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
+    user_id UUID REFERENCES users (id) NOT NULL,
     value TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL
 );
 
 CREATE TABLE plan (
-    id SERIAL PRIMARY KEY,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
     name TEXT NOT NULL,
     price INT NOT NULL,
     duration_days INT NOT NULL,
@@ -61,9 +61,9 @@ CREATE TABLE plan (
 );
 
 CREATE TABLE subscription (
-    id SERIAL PRIMARY KEY,
-    plan_id INT NOT NULL REFERENCES plan (id),
-    user_id INT NOT NULL REFERENCES users (id),
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
+    plan_id UUID NOT NULL REFERENCES plan (id),
+    user_id UUID NOT NULL REFERENCES users (id),
     start_date TIMESTAMPTZ NOT NULL,
     end_date TIMESTAMPTZ NOT NULL,
     is_active BOOLEAN DEFAULT TRUE,
@@ -72,8 +72,8 @@ CREATE TABLE subscription (
 );
 
 CREATE TABLE connector (
-    id SERIAL PRIMARY KEY,
-    external_id INTEGER NOT NULL, -- pluggy connector id
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
+    external_id UUID NOT NULL, -- pluggy connector id
     name TEXT NOT NULL,
     primary_color TEXT NOT NULL,
     country TEXT NOT NULL,
@@ -86,9 +86,9 @@ CREATE TABLE connector (
 );
 
 CREATE TABLE fi_connection (
-    id SERIAL PRIMARY KEY,
-    external_id TEXT NOT NULL, -- pluggy item id
-    connector_id INTEGER REFERENCES connector (id) NOT NULL,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
+    external_id UUID NOT NULL, -- pluggy item id
+    connector_id UUID REFERENCES connector (id) NOT NULL,
     status TEXT NOT NULL,
     execution_status TEXT NOT NULL,
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
@@ -97,7 +97,7 @@ CREATE TABLE fi_connection (
 );
 
 CREATE TABLE bank_account_data (
-    id SERIAL PRIMARY KEY,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
     transfer_number TEXT NOT NULL,
     closing_balance INTEGER NOT NULL,
     automatically_invested_balance INTEGER,
@@ -109,7 +109,7 @@ CREATE TABLE bank_account_data (
 );
 
 CREATE TABLE credit_account_data (
-    id SERIAL PRIMARY KEY,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
     level TEXT NOT NULL,
     brand TEXT NOT NULL,
     balance_close_date DATE NOT NULL,
@@ -124,30 +124,30 @@ CREATE TABLE credit_account_data (
 );
 
 CREATE TABLE account (
-    id SERIAL PRIMARY KEY,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
     type TEXT NOT NULL,
     name TEXT NOT NULL,
     balance INT NOT NULL,
     currency_code TEXT NOT NULL,
-    user_id INTEGER REFERENCES users (id) NOT NULL,
-    external_id TEXT, -- pluggy account id
+    user_id UUID REFERENCES users (id) NOT NULL,
+    external_id UUID, -- pluggy account id
     subtype TEXT,
     number TEXT,
     owner TEXT,
     tax_number TEXT,
-    bank_account_data_id INTEGER REFERENCES bank_account_data (id),
-    credit_account_data_id INTEGER REFERENCES credit_account_data (id),
-    fi_connection_id INTEGER REFERENCES fi_connection (id),
+    bank_account_data_id UUID REFERENCES bank_account_data (id),
+    credit_account_data_id UUID REFERENCES credit_account_data (id),
+    fi_connection_id UUID REFERENCES fi_connection (id),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMPTZ
 );
 
 CREATE TABLE category (
-    id SERIAL PRIMARY KEY,
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
     name TEXT NOT NULL,
     default_category BOOLEAN NOT NULL DEFAULT false,
-    user_id INTEGER REFERENCES users (id),
+    user_id UUID REFERENCES users (id),
     created_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     updated_at TIMESTAMPTZ DEFAULT CURRENT_TIMESTAMP NOT NULL,
     deleted_at TIMESTAMPTZ
@@ -162,15 +162,15 @@ VALUES
     ('entertainment');
 
 CREATE TABLE transaction (
-    id SERIAL PRIMARY KEY,
-    external_id TEXT, -- pluggy transaction id
-    user_id INTEGER REFERENCES users (id) NOT NULL,
-    account_id INTEGER REFERENCES account (id),
+    id UUID DEFAULT (gen_random_uuid()) PRIMARY KEY,
+    external_id UUID, -- pluggy transaction id
+    user_id UUID REFERENCES users (id) NOT NULL,
+    account_id UUID REFERENCES account (id),
     description TEXT,
     amount INT NOT NULL,
     currency_code TEXT NOT NULL,
     transaction_date TIMESTAMPTZ NOT NULL,
-    category_id INTEGER REFERENCES category (id),
+    category_id UUID REFERENCES category (id),
     status TEXT,
     type TEXT,
     operation_type TEXT,

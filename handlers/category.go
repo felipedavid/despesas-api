@@ -4,10 +4,10 @@ import (
 	"context"
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/felipedavid/saldop/internal/filters"
 	"github.com/felipedavid/saldop/internal/helpers"
+	"github.com/felipedavid/saldop/models"
 	"github.com/felipedavid/saldop/service"
 	"github.com/felipedavid/saldop/storage"
 )
@@ -25,7 +25,10 @@ func createCategory(w http.ResponseWriter, r *http.Request) error {
 
 	user := helpers.GetUserFromRequestContext(r)
 
-	newCategory := params.Model(&user.ID)
+	newCategory := &models.Category{
+		Name:   *params.Name,
+		UserID: &user.ID,
+	}
 	err = storage.InsertCategory(context.Background(), newCategory)
 	if err != nil {
 		return err
@@ -54,14 +57,11 @@ func listUserCategories(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteCategory(w http.ResponseWriter, r *http.Request) error {
-	categoryID, err := strconv.Atoi(r.PathValue("categoryID"))
-	if err != nil {
-		return BadRequestError(r.Context(), err.Error())
-	}
+	categoryID := r.PathValue("categoryID")
 
 	user := helpers.GetUserFromRequestContext(r)
 
-	err = storage.DeleteCategory(context.Background(), user.ID, categoryID)
+	err := storage.DeleteCategory(context.Background(), user.ID, categoryID)
 	if err != nil {
 		return err
 	}

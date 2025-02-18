@@ -15,7 +15,7 @@ type CreateAccountParams struct {
 	Type         *string `json:"type"`
 	Balance      *int    `json:"balance"`
 	CurrencyCode *string `json:"currency_code"`
-	UserID       *int
+	UserID       *string
 
 	*validator.Validator
 }

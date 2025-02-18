@@ -4,7 +4,6 @@ import (
 	"context"
 	"errors"
 	"net/http"
-	"strconv"
 
 	"github.com/felipedavid/saldop/internal/filters"
 	"github.com/felipedavid/saldop/internal/helpers"
@@ -35,14 +34,11 @@ func createAccount(w http.ResponseWriter, r *http.Request) error {
 }
 
 func deleteAccount(w http.ResponseWriter, r *http.Request) error {
-	accountID, err := strconv.Atoi(r.PathValue("accountID"))
-	if err != nil {
-		return BadRequestError(r.Context(), err.Error())
-	}
+	accountID := r.PathValue("accountID")
 
 	user := helpers.GetUserFromRequestContext(r)
 
-	err = storage.DeleteAccount(context.Background(), user.ID, accountID)
+	err := storage.DeleteAccount(context.Background(), user.ID, accountID)
 	if err != nil {
 		return err
 	}
@@ -54,10 +50,7 @@ func deleteAccount(w http.ResponseWriter, r *http.Request) error {
 func getUserAccount(w http.ResponseWriter, r *http.Request) error {
 	user := helpers.GetUserFromRequestContext(r)
 
-	accountID, err := strconv.Atoi(r.PathValue("accountID"))
-	if err != nil {
-		return BadRequestError(r.Context(), err.Error())
-	}
+	accountID := r.PathValue("accountID")
 
 	account, err := storage.GetUserAccount(context.Background(), user.ID, accountID)
 	if err != nil {
@@ -87,13 +80,10 @@ func listUserAccounts(w http.ResponseWriter, r *http.Request) error {
 }
 
 func editAccount(w http.ResponseWriter, r *http.Request) error {
-	accountID, err := strconv.Atoi(r.PathValue("accountID"))
-	if err != nil {
-		return BadRequestError(r.Context(), err.Error())
-	}
+	accountID := r.PathValue("accountID")
 
 	params := service.NewEditAccountParams(r.Context())
-	err = readJSON(r, &params)
+	err := readJSON(r, &params)
 	if err != nil {
 		return BadRequestError(r.Context(), err.Error())
 	}

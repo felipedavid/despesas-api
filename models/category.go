@@ -3,10 +3,10 @@ package models
 import "time"
 
 type Category struct {
-	ID              int    `db:"id" json:"id"`
-	Name            string `db:"name" json:"name"`
-	DefaultCategory bool   `db:"default_category" json:"default_category"`
-	UserID          *int   `db:"user_id" json:"user_id"`
+	ID              string  `db:"id" json:"id"`
+	Name            string  `db:"name" json:"name"`
+	DefaultCategory bool    `db:"default_category" json:"default_category"`
+	UserID          *string `db:"user_id" json:"user_id"`
 
 	CreatedAt time.Time  `db:"created_at" json:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at" json:"updated_at"`
@@ -14,10 +14,10 @@ type Category struct {
 }
 
 type CategoryNullable struct {
-	ID              *int    `db:"id"`
+	ID              *string `db:"id"`
 	Name            *string `db:"name"`
 	DefaultCategory *bool   `db:"default_category"`
-	UserID          *int    `db:"user_id"`
+	UserID          *string `db:"user_id"`
 
 	CreatedAt *time.Time `db:"created_at"`
 	UpdatedAt *time.Time `db:"updated_at"`

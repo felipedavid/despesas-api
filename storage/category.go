@@ -35,7 +35,7 @@ func UpdateCategory(ctx context.Context, category *models.Category) error {
 	return nil
 }
 
-func ListUserCategories(ctx context.Context, userID int, f *filters.Filters) ([]models.Category, error) {
+func ListUserCategories(ctx context.Context, userID string, f *filters.Filters) ([]models.Category, error) {
 	query := `
 		SELECT
             count(*) OVER(),
@@ -83,7 +83,7 @@ func ListUserCategories(ctx context.Context, userID int, f *filters.Filters) ([]
 	return categories, nil
 }
 
-func DeleteCategory(ctx context.Context, userID, categoryID int) error {
+func DeleteCategory(ctx context.Context, userID, categoryID string) error {
 	query := `
 		UPDATE category
 		SET deleted_at = NOW()

@@ -7,7 +7,7 @@ import (
 	"github.com/felipedavid/saldop/models"
 )
 
-func GetUserTransaction(ctx context.Context, userID, transactionID int) (*models.Transaction, error) {
+func GetUserTransaction(ctx context.Context, userID, transactionID string) (*models.Transaction, error) {
 	query := `
         SELECT
 			id,
@@ -158,7 +158,7 @@ func ListUserTransactions(ctx context.Context, userID int, f *filters.Filters) (
 	return transactions, nil
 }
 
-func GetUserTransactionWithPopulatedFields(ctx context.Context, userID, transactionID int) (*models.Transaction, error) {
+func GetUserTransactionWithPopulatedFields(ctx context.Context, userID, transactionID string) (*models.Transaction, error) {
 	var t models.Transaction
 	var c models.CategoryNullable
 	var a models.AccountNullable
@@ -288,7 +288,7 @@ func GetUserTransactionWithPopulatedFields(ctx context.Context, userID, transact
 	return &t, nil
 }
 
-func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID int, f *filters.Filters) ([]models.Transaction, error) {
+func ListUserTransactionsWithPopulatedFields(ctx context.Context, userID string, f *filters.Filters) ([]models.Transaction, error) {
 	query := `
 		SELECT
             count(*) OVER(),
@@ -465,7 +465,7 @@ func UpdateTransaction(ctx context.Context, t *models.Transaction) error {
 	return nil
 }
 
-func DeleteTransaction(ctx context.Context, userID, transactionID int) error {
+func DeleteTransaction(ctx context.Context, userID, transactionID string) error {
 	query := `
 		UPDATE transaction
 		SET deleted_at = NOW()

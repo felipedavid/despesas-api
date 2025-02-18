@@ -3,9 +3,9 @@ package models
 import "time"
 
 type Transaction struct {
-	ID              int       `db:"id" json:"id"`
+	ID              string    `db:"id" json:"id"`
 	ExternalID      *int      `db:"external_id" json:"-"`
-	UserID          int       `db:"user_id" json:"user_id"`
+	UserID          string    `db:"user_id" json:"user_id"`
 	AccountID       *int      `db:"account_id" json:"account_id"`
 	Description     *string   `db:"description" json:"description"`
 	Amount          int       `db:"amount" json:"amount"`

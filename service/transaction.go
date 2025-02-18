@@ -19,7 +19,7 @@ type CreateTransactionParams struct {
 	Amount          *int       `json:"amount"`
 	CurrencyCode    *string    `json:"currency_code"`
 	TransactionDate *time.Time `json:"transaction_date"`
-	UserID          *int
+	UserID          *string
 
 	*validator.Validator
 }

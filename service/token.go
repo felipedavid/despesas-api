@@ -17,7 +17,7 @@ func ValidateTokenPlaintext(v *validator.Validator, tokenPlaintext string) {
 	v.Check(len(tokenPlaintext) == 26, "token", "should be 26 bytes long")
 }
 
-func generateToken(userID int, ttl time.Duration, scope models.TokenScope) (*models.Token, error) {
+func generateToken(userID string, ttl time.Duration, scope models.TokenScope) (*models.Token, error) {
 	token := &models.Token{
 		UserID: userID,
 		Expiry: time.Now().Add(ttl),
@@ -39,7 +39,7 @@ func generateToken(userID int, ttl time.Duration, scope models.TokenScope) (*mod
 	return token, nil
 }
 
-func CreateToken(userID int, ttl time.Duration, scope models.TokenScope) (*models.Token, error) {
+func CreateToken(userID string, ttl time.Duration, scope models.TokenScope) (*models.Token, error) {
 	t, err := generateToken(userID, ttl, scope)
 	if err != nil {
 		return nil, err
