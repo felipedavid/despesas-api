@@ -50,9 +50,9 @@ type Account struct {
 	Number              *string         `db:"number" json:"-"`
 	Owner               *string         `db:"owner" json:"-"`
 	TaxNumber           *string         `db:"tax_number" json:"-"`
-	BankAccountDataID   *int            `db:"bank_account_data_id" json:"-"`
-	CreditAccountDataID *int            `db:"credit_account_data_id" json:"-"`
-	FiConnectionID      *int            `db:"fi_connection_id" json:"-"`
+	BankAccountDataID   *string         `db:"bank_account_data_id" json:"-"`
+	CreditAccountDataID *string         `db:"credit_account_data_id" json:"-"`
+	FiConnectionID      *string         `db:"fi_connection_id" json:"-"`
 
 	CreatedAt time.Time  `db:"created_at" json:"created_at"`
 	UpdatedAt time.Time  `db:"updated_at" json:"updated_at"`
@@ -71,9 +71,9 @@ type AccountNullable struct {
 	Number              *string         `db:"number"`
 	Owner               *string         `db:"owner"`
 	TaxNumber           *string         `db:"tax_number"`
-	BankAccountDataID   *int            `db:"bank_account_data_id"`
-	CreditAccountDataID *int            `db:"credit_account_data_id"`
-	FiConnectionID      *int            `db:"fi_connection_id"`
+	BankAccountDataID   *string         `db:"bank_account_data_id"`
+	CreditAccountDataID *string         `db:"credit_account_data_id"`
+	FiConnectionID      *string         `db:"fi_connection_id"`
 
 	CreatedAt *time.Time `db:"created_at"`
 	UpdatedAt *time.Time `db:"updated_at"`

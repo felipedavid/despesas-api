@@ -40,8 +40,10 @@ func TestMain(m *testing.M) {
 		os.Exit(-1)
 	}
 
+	mi.Down()
+
 	err = mi.Up()
-	if err != nil {
+	if err != nil && err.Error() != "no change" {
 		slog.Error(err.Error())
 		os.Exit(-1)
 	}
@@ -49,5 +51,7 @@ func TestMain(m *testing.M) {
 	Init(connPool)
 
 	exitCode := m.Run()
+
+	mi.Down()
 	os.Exit(exitCode)
 }
