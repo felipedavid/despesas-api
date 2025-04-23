@@ -6,7 +6,7 @@ type Transaction struct {
 	ID              string    `db:"id" json:"id"`
 	ExternalID      *int      `db:"external_id" json:"-"`
 	UserID          string    `db:"user_id" json:"user_id"`
-	AccountID       *int      `db:"account_id" json:"account_id"`
+	AccountID       *string   `db:"account_id" json:"account_id"`
 	Description     *string   `db:"description" json:"description"`
 	Amount          int       `db:"amount" json:"amount"`
 	CurrencyCode    string    `db:"currency_code" json:"currency_code"`

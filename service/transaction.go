@@ -14,7 +14,7 @@ import (
 
 type CreateTransactionParams struct {
 	Description     *string    `json:"description"`
-	AccountID       *int       `json:"account_id"`
+	AccountID       *string    `json:"account_id"`
 	CategoryID      *int       `json:"category_id"`
 	Amount          *int       `json:"amount"`
 	CurrencyCode    *string    `json:"currency_code"`
@@ -62,7 +62,7 @@ func CreateTransaction(p *CreateTransactionParams) (*models.Transaction, error) 
 
 type EditTransactionParams struct {
 	Description     null.Nullable[*string]   `json:"description"`
-	AccountID       null.Nullable[*int]      `json:"account_id"`
+	AccountID       null.Nullable[*string]   `json:"account_id"`
 	CategoryID      null.Nullable[*int]      `json:"category_id"`
 	Amount          null.Nullable[int]       `json:"amount"`
 	CurrencyCode    null.Nullable[string]    `json:"currency_code"`

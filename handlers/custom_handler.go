@@ -88,6 +88,7 @@ func handleErrors(h customHandler) http.HandlerFunc {
 
 				writeJSON(w, e.Status(), resBody)
 			default:
+				slog.Error("unexpected error", "error", err)
 				debug.PrintStack()
 
 				resBody := map[string]any{
